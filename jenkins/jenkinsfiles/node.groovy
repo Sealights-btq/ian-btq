@@ -42,16 +42,20 @@ pipeline {
 stage('Commit & Push Changes') {
     steps {
         container('shell') {
-            sh """
-                git config --global --add safe.directory /home/jenkins/agent/workspace/node-script
-                git config --global user.email "jenkins@yourdomain.com"
-                git config --global user.name "Jenkins CI"
-                git add src/productcatalogservice/products.json
-                git diff --cached --quiet || git commit -m "Automated product name update from Jenkins"
-                
-                # Push current HEAD to main branch
-                git push origin HEAD:main
-            """
+            withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                sh """
+                    git config --global --add safe.directory /home/jenkins/agent/workspace/node-script
+                    git config --global user.email "jenkins@yourdomain.com"
+                    git config --global user.name "Jenkins CI"
+                    
+                    # Configure git to use the token
+                    git remote set-url origin https://\${GITHUB_TOKEN}@github.com/Sealights-btq/ian-btq.git
+                    
+                    git add src/productcatalogservice/products.json
+                    git diff --cached --quiet || git commit -m "Automated product name update from Jenkins"
+                    git push origin HEAD:main
+                """
+            }
         }
     }
 }
