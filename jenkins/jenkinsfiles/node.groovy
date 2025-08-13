@@ -14,26 +14,26 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    doGenerateSubmoduleConfigurations: false,
-                    extensions: [],
-                    userRemoteConfigs: [[url: 'https://github.com/Sealights-btq/ian-btq.git']]
-                ])
+                container('shell') {
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        userRemoteConfigs: [[url: 'https://github.com/Sealights-btq/ian-btq.git']]
+                    ])
+                }
             }
         }
 
         stage('Run Node Script') {
             steps {
-                script {
+                container('shell') {
                     sh """
                         echo 'Node version:'
                         node -v
                         echo 'NPM version:'
                         npm -v
-
-                        # Run the update script with explicit file path
                         node scripts/update-product-names.js src/productcatalogservice/products.json
                     """
                 }
@@ -42,7 +42,7 @@ pipeline {
 
         stage('Commit & Push Changes') {
             steps {
-                script {
+                container('shell') {
                     sh """
                         git config user.email "jenkins@yourdomain.com"
                         git config user.name "Jenkins CI"
