@@ -41,17 +41,21 @@ pipeline {
         }
 
         stage('Commit & Push Changes') {
-            steps {
-                container('shell') {
-                    sh """
-                        git config user.email "jenkins@yourdomain.com"
-                        git config user.name "Jenkins CI"
-                        git add src/productcatalogservice/products.json
-                        git commit -m "Automated product name update from Jenkins" || echo "No changes to commit"
-                        git push origin main
-                    """
-                }
-            }
-        }
+    container('shell') {
+        sh """
+            git config --global user.email "jenkins@yourdomain.com"
+            git config --global user.name "Jenkins CI"
+
+            git add src/productcatalogservice/products.json
+
+            # Commit if there are changes, otherwise skip
+            git diff --cached --quiet || git commit -m "Automated product name update from Jenkins"
+
+            # Push changes
+            git push origin main
+        """
+    }
+}
+
     }
 }
