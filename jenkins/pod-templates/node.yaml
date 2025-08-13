@@ -4,12 +4,6 @@ spec:
   containers:
     - name: jnlp
       image: jenkins/inbound-agent:latest
-      command:
-        - sh
-      args:
-        - -c
-        - |
-          apt-get update && apt-get install -y git && exec /usr/local/bin/jenkins-agent
       workingDir: /home/jenkins/agent
       resources:
         requests:
