@@ -1,0 +1,27 @@
+name: Edit Currency Service
+
+on:
+  push:
+
+jobs:
+  edit-currency:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run editCurrencyservice script
+        run: node .github/scripts/editCurrencyservice.js src/currencyservice/data/currency_conversion.json
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/currencyservice/data/currency_conversion.json
+          git commit -m "Auto-update currency_conversion.json from editCurrencyservice.js" || echo "No changes to commit"
+          git push
