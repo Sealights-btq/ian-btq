@@ -4,6 +4,12 @@ spec:
   containers:
     - name: jnlp
       image: jenkins/inbound-agent:latest
+      command:
+        - sh
+      args:
+        - -c
+        - |
+          apk add --no-cache git && exec /usr/local/bin/jenkins-agent
       workingDir: /home/jenkins/agent
       resources:
         requests:
