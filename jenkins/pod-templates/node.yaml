@@ -16,15 +16,22 @@ spec:
           ephemeral-storage: 200Mi
       securityContext:
         privileged: true
-
+      volumeMounts:
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent
+          readOnly: false
     - name: shell
-      image: node:slim
+      image: node:18
       command:
         - sh
       args:
         - -c
         - |
-          apt-get update && apt-get install -y git && sleep infinity
+          apt-get update && apt-get install -y git curl && 
+          git --version && 
+          echo "Git installed successfully" && 
+          sleep infinity
+      workingDir: /home/jenkins/agent
       resources:
         requests:
           memory: 600Mi
@@ -34,3 +41,13 @@ spec:
           memory: 1000Mi
           cpu: "1.5"
           ephemeral-storage: 2000Mi
+      volumeMounts:
+        - name: workspace-volume
+          mountPath: /home/jenkins/agent
+          readOnly: false
+  nodeSelector:
+    kubernetes.io/os: linux
+  restartPolicy: Never
+  volumes:
+    - name: workspace-volume
+      emptyDir: {}
