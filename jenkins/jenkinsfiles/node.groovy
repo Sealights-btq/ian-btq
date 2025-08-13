@@ -33,8 +33,8 @@ pipeline {
                         echo 'NPM version:'
                         npm -v
 
-                        # Run the update script
-                        node scripts/update-product-names.js
+                        # Run the update script with explicit file path
+                        node scripts/update-product-names.js src/productcatalogservice/products.json
                     """
                 }
             }
@@ -46,8 +46,8 @@ pipeline {
                     sh """
                         git config user.email "jenkins@yourdomain.com"
                         git config user.name "Jenkins CI"
-                        git add .
-                        git commit -m "Automated update from Jenkins"
+                        git add src/productcatalogservice/products.json
+                        git commit -m "Automated product name update from Jenkins" || echo "No changes to commit"
                         git push origin main
                     """
                 }
