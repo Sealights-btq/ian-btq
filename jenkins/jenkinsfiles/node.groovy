@@ -39,17 +39,15 @@ pipeline {
                 }
             }
         }
-
-       stage('Commit & Push Changes') {
+stage('Commit & Push Changes') {
     steps {
         container('shell') {
             sh """
+                git config --global --add safe.directory /home/jenkins/agent/workspace/node-script
                 git config --global user.email "jenkins@yourdomain.com"
                 git config --global user.name "Jenkins CI"
                 git add src/productcatalogservice/products.json
-                # Commit if there are changes
                 git diff --cached --quiet || git commit -m "Automated product name update from Jenkins"
-                # Push changes
                 git push origin main
             """
         }
