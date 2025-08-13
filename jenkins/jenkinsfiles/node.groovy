@@ -48,7 +48,9 @@ stage('Commit & Push Changes') {
                 git config --global user.name "Jenkins CI"
                 git add src/productcatalogservice/products.json
                 git diff --cached --quiet || git commit -m "Automated product name update from Jenkins"
-                git push origin main
+                
+                # Push current HEAD to main branch
+                git push origin HEAD:main
             """
         }
     }
