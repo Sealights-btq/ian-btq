@@ -29,7 +29,8 @@ spec:
         - |
           apt-get update && apt-get install -y git curl && 
           git --version && 
-          echo "Git installed successfully" && 
+          git config --global --add safe.directory '*' &&
+          echo "Git installed and configured successfully" && 
           sleep infinity
       workingDir: /home/jenkins/agent
       resources:
