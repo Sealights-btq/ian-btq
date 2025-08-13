@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      yaml readTrusted('jenkins/pod-templates/node.yaml')
+      yaml readTrusted('jenkins/pod-templates/cypress.yaml')
       defaultContainer "shell"
     }
   }
@@ -11,13 +11,15 @@ pipeline {
         timestamps()
     }
 
-    stage('Run scripts') {
-        steps{
-            script{
-              sh """
-              node -v
-              npm -v
-              """
+    stages {
+        stage('Run scripts') {
+            steps{
+                script{
+                  sh """
+                  node -v
+                  npm -v
+                  """
+                }
             }
         }
     }
