@@ -16,12 +16,15 @@ spec:
           ephemeral-storage: 200Mi
       securityContext:
         privileged: true
+
     - name: shell
       image: node:slim
       command:
-        - sleep
+        - sh
       args:
-        - infinity
+        - -c
+        - |
+          apt-get update && apt-get install -y git && sleep infinity
       resources:
         requests:
           memory: 600Mi
@@ -31,4 +34,3 @@ spec:
           memory: 1000Mi
           cpu: "1.5"
           ephemeral-storage: 2000Mi
-
