@@ -34,7 +34,7 @@ pipeline {
                         node -v
                         echo 'NPM version:'
                         npm -v
-                        node scripts/update-product-names.js src/productcatalogservice/products.json
+                        node .github/scripts/update-product-names.js src/productcatalogservice/products.json
                     """
                 }
             }
