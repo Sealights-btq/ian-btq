@@ -22,6 +22,7 @@ if(process.env.DISABLE_PROFILER) {
 }
 else {
   console.log("Profiler enabled.")
+  console.log("Calling Function!");
   require('@google-cloud/profiler').start({
     serviceContext: {
       service: 'paymentservice',
