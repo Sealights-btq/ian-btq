@@ -36,7 +36,7 @@ class CreditCardError extends Error {
 
 class InvalidCreditCard extends CreditCardError {
   constructor (cardType) {
-    super(`Credit card info is invalid`);
+    super(`Credit card info is not valid`);
   }
 }
 
