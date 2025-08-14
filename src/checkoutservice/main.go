@@ -82,8 +82,6 @@ type checkoutService struct {
 }
 
 func main() {
-
-  fmt.Print("Starting main() function!"))
         
 	ctx := context.Background()
 	if os.Getenv("ENABLE_TRACING") == "1" {
