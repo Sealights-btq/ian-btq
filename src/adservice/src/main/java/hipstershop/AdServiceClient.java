@@ -109,6 +109,8 @@ public class AdServiceClient {
      * get the ads from the Ads Service
      */
     public static void main(String[] args) throws InterruptedException {
+
+         System.out.println("Starting function with the class name: AdServiceClient");
         // Add final keyword to pass checkStyle.
         final String contextKeys = getStringOrDefaultFromArgs(args, 0, "camera");
         final String host = getStringOrDefaultFromArgs(args, 1, "localhost");
