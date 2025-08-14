@@ -1,47 +1,50 @@
-const fs = require('fs');
+const fs = require("fs");
+const path = require("path");
 
-// The target line to modify
-const targetLine = "  logger.info('Client for email service.')";
-
-// Get the file path from command line arguments
-// process.argv[0] is 'node'
-// process.argv[1] is the script file path itself
-// So, process.argv[2] will be the first argument passed
-const filePath = process.argv[2];
-
-// Check if a file path was provided
-if (!filePath) {
-  console.error('Usage: node editEmailService.js <path_to_python_file>');
-  process.exit(1); // Exit with an error code
+if (process.argv.length < 4) {
+  console.error("Usage: node editEmailService.js <path_to_email_client.py> <path_to_email_server.py>");
+  process.exit(1);
 }
 
-fs.readFile(filePath, 'utf8', (err, data) => { // Read the file
-  if (err) {
-    console.error(`Error reading the file "${filePath}":`, err);
-    return;
+const clientFilePath = path.resolve(process.argv[2]);
+const serverFilePath = path.resolve(process.argv[3]);
+
+function editEmailClient(filePath) {
+  const targetNoPeriod = "  logger.info('Client for email service')";
+  const targetWithPeriod = "  logger.info('Client for email service.')";
+
+  let content = fs.readFileSync(filePath, "utf8");
+  if (content.includes(targetWithPeriod)) {
+    content = content.replace(targetWithPeriod, targetNoPeriod); // remove period
+    console.log(`Removed period in email_client.py`);
+  } else if (content.includes(targetNoPeriod)) {
+    content = content.replace(targetNoPeriod, targetWithPeriod); // add period
+    console.log(`Added period in email_client.py`);
+  } else {
+    console.log(`Target line not found in email_client.py`);
   }
+  fs.writeFileSync(filePath, content, "utf8");
+}
 
-  const lines = data.split('\n'); // Split the file content into an array of lines
+function editEmailServer(filePath) {
+  const targetNoPeriod = '  logger.info("Successfully started Stackdriver Profiler")';
+  const targetWithPeriod = '  logger.info("Successfully started Stackdriver Profiler.")';
 
-  const modifiedLines = lines.map(line => {
-    if (line === targetLine) {
-      if (line.endsWith('.')) {
-        return line.slice(0, -1); // Remove the period if it exists
-      } else {
-        return line + '.'; // Add a period if it doesn't exist
-      }
-    }
-    return line; // Return the line unchanged if it's not the target line
-  });
+  let content = fs.readFileSync(filePath, "utf8");
+  if (content.includes(targetWithPeriod)) {
+    content = content.replace(targetWithPeriod, targetNoPeriod); // remove period
+    console.log(`Removed period in email_server.py`);
+  } else if (content.includes(targetNoPeriod)) {
+    content = content.replace(targetNoPeriod, targetWithPeriod); // add period
+    console.log(`Added period in email_server.py`);
+  } else {
+    console.log(`Target line not found in email_server.py`);
+  }
+  fs.writeFileSync(filePath, content, "utf8");
+}
 
-  const modifiedContent = modifiedLines.join('\n'); // Join the lines back into a single string
+// Run edits
+editEmailClient(clientFilePath);
+editEmailServer(serverFilePath);
 
-  fs.writeFile(filePath, modifiedContent, 'utf8', (err) => { // Write the modified content back to the file
-    if (err) {
-      console.error(`Error writing to the file "${filePath}":`, err);
-      return;
-    }
-    console.log(`File "${filePath}" modified successfully!`);
-  });
-});
-
+console.log("Edits completed.");

@@ -1,31 +1,29 @@
 const fs = require("fs");
+const path = require("path");
 
-// Get file path from command-line arguments
-const filePath = process.argv[2];
-if (!filePath) {
-    console.error("Usage: node editShippinService.js <path-to-file>");
-    process.exit(1);
+if (process.argv.length < 3) {
+  console.error("Usage: node editShippingService.js <file>");
+  process.exit(1);
 }
 
-// Read file
-let content = fs.readFileSync(filePath, "utf8");
+const filePath = path.resolve(process.argv[2]);
 
-// Pattern matches the exact fmt.Print line (ignores spaces/tabs)
-const regexWithExclamation = /fmt\.Print\(\s*"GetQuote produces a shipping quote!"\s*\)/;
-const regexWithoutExclamation = /fmt\.Print\(\s*"GetQuote produces a shipping quote"\s*\)/;
+try {
+  let content = fs.readFileSync(filePath, "utf8");
 
-if (regexWithExclamation.test(content)) {
-    // Remove the exclamation point
-    content = content.replace(regexWithExclamation, 'fmt.Print("GetQuote produces a shipping quote")');
-    console.log("Removed exclamation point from GetQuote print statement.");
-} else if (regexWithoutExclamation.test(content)) {
-    // Add the exclamation point
-    content = content.replace(regexWithoutExclamation, 'fmt.Print("GetQuote produces a shipping quote!")');
-    console.log("Added exclamation point to GetQuote print statement.");
-} else {
-    console.log("Target fmt.Print statement not found. No changes made.");
+  const target = 'log.Info("Tracing enabled, but temporarily unavailable")';
+  const targetWithPeriod = 'log.Info("Tracing enabled, but temporarily unavailable.")';
+
+  // Only replace if it matches exactly without the period
+  if (content.includes(target)) {
+    content = content.replace(target, targetWithPeriod);
+    fs.writeFileSync(filePath, content, "utf8");
+    console.log(`Updated line in: ${filePath}`);
+  } else {
+    console.log(`No change needed in: ${filePath}`);
+  }
+
+} catch (err) {
+  console.error(`Error reading or writing file: ${err.message}`);
+  process.exit(1);
 }
-
-// Write changes back
-fs.writeFileSync(filePath, content, "utf8");
-

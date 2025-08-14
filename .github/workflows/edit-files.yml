@@ -29,7 +29,7 @@ jobs:
             ["editRecommendationService.js"]="src/recommendationservice/recommendation_server.py"
             ["editShippingService.js"]="src/shippingservice/main.go"
             ["modifyFrontEndService.js"]="src/shippingservice/main.go"
-            ["editEmailService.js"]="src//emailservice/email_client.py"
+            ["editEmailService.js"]="src/emailservice/email_client.py src/emailservice/email_server.py"
             ["editCartService.js"]="src/cartservice/src/cartstore/RedisCartStore.cs src/cartservice/src/cartstore/AlloyDBCartStore.cs src/cartservice/src/cartstore/SpannerCartStore.cs"
             ["editCheckoutservice.js"]="src/checkoutservice/main.go"
             ["editCurrencyservice.js"]="src/currencyservice/data/currency_conversion.json"
