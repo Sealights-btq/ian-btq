@@ -1,4 +1,3 @@
-// toggle-exclamation.js
 const fs = require("fs");
 const path = require("path");
 
@@ -20,16 +19,17 @@ if (!fs.existsSync(absPath)) {
 try {
   let content = fs.readFileSync(absPath, "utf8");
 
-  const regex = /fmt\.Println\("Starting main\(\) function(!?)"\)/;
+  // Regular expression to match 'log.Info("Tracing enabled.")' or 'log.Info("Tracing enabled")'
+  const regex = /log\.Info\("Tracing enabled(\.?)"\)/;
 
   if (regex.test(content)) {
-    content = content.replace(regex, (match, exclamation) => {
-      if (exclamation) {
-        // Remove the exclamation mark
-        return 'fmt.Println("Starting main() function")';
+    content = content.replace(regex, (match, dot) => {
+      if (dot) {
+        // Remove the dot
+        return 'log.Info("Tracing enabled")';
       } else {
-        // Add the exclamation mark
-        return 'fmt.Println("Starting main() function!")';
+        // Add the dot
+        return 'log.Info("Tracing enabled.")';
       }
     });
 
