@@ -46,7 +46,7 @@ RUN ./slcli config init --lang go --token ./token.txt
 #Getting the build session id 
 RUN ./slcli config create-bsid --app ${SERVICE_NAME} --branch ${BRANCH} --build ${BUILD_NAME}
 #Scanning the code with sealights
-RUN ./slcli scan --bsid buildSessionId.txt --path-to-scanner ./slgoagent --workspacepath ./ --scm none --packages-excluded "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
+RUN ./slcli scan --bsid buildSessionId.txt --path-to-scanner ./slgoagent --workspacepath ./ --scm git --packages-excluded "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
 
 
 # Skaffold passes in debug-oriented compiler flags
