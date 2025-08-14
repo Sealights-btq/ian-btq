@@ -1,0 +1,54 @@
+name: Edit Files and Commit
+
+on:
+  schedule:
+    - cron: "0 */2 * * *" # Every 2 hours UTC
+  workflow_dispatch:       # Optional: run manually
+
+jobs:
+  edit-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run scripts and commit changes
+        run: |
+          declare -A edits=(
+            ["editadService.js"]="src/adservice/src/main/java/hipstershop/AdServiceClient.java"
+            ["update-product-names.js"]="src/productcatalogservice/products.json"
+            ["editPaymentService.js"]="src/paymentservice/charge.js"
+            ["editRecommendationService.js"]="src/recommendationservice/client.py"
+            ["editShippingService.js"]="src/shippingservice/main.go"
+            ["editCartService.js"]="src/cartservice/src/cartstore/RedisCartStore.cs src/cartservice/src/cartstore/AlloyDBCartStore.cs src/cartservice/src/cartstore/SpannerCartStore.cs"
+            ["editCheckoutservice.js"]="src/checkoutservice/main.go"
+            ["editCurrencyservice.js"]="src/currencyservice/data/currency_conversion.json"
+          )
+
+          for script in "${!edits[@]}"; do
+            files=${edits[$script]}
+
+            echo "Running $script on $files"
+            node ".github/scripts/$script" $files
+
+            for f in $files; do
+              if git diff --quiet -- "$f"; then
+                echo "No changes in $f"
+              else
+                git config user.name "github-actions[bot]"
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+                git add "$f"
+                git commit -m "changed $(basename "$f")"
+                git push
+              fi
+            done
+          done
+
