@@ -26,7 +26,7 @@ jobs:
             ["editadService.js"]="src/adservice/src/main/java/hipstershop/AdServiceClient.java"
             ["update-product-names.js"]="src/productcatalogservice/products.json"
             ["editPaymentService.js"]="src/paymentservice/charge.js src/paymentservice/index.js src/paymentservice/server.js" 
-            ["editRecommendationService.js"]="src/recommendationservice/client.py"
+            ["editRecommendationService.js"]="src/recommendationservice/recommendation_server.py"
             ["editShippingService.js"]="src/shippingservice/main.go"
             ["modifyFrontEndService.js"]="src/shippingservice/main.go"
             ["editEmailService.js"]="src//emailservice/email_client.py"
