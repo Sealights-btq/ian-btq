@@ -1,3 +1,4 @@
+const fs = require('fs'); 
 
 async function modifyFile() {
     // Check if a file path was provided as a command-line argument
