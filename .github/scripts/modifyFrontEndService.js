@@ -1,4 +1,4 @@
-const fs = require('fs'); 
+const fs = require('fs');
 
 async function modifyFile() {
     // Check if a file path was provided as a command-line argument
@@ -9,20 +9,24 @@ async function modifyFile() {
 
     const filePath = process.argv[2]; // The file path is the third element in process.argv
 
+    // Define the line variations
+    const lineWithPeriod = 'log.Info("Tracing enabled.")';
+    const lineWithoutPeriod = 'log.Info("Tracing enabled")';
+
     try {
         let fileContent = await fs.promises.readFile(filePath, 'utf8');
 
         let updatedContent;
-        if (fileContent.includes(lineToChange)) {
+        if (fileContent.includes(lineWithPeriod)) {
             // Remove the period
-            updatedContent = fileContent.replace(lineToChange, lineWithoutPeriod);
+            updatedContent = fileContent.replace(lineWithPeriod, lineWithoutPeriod);
             console.log(`Period removed from "${filePath}".`);
         } else if (fileContent.includes(lineWithoutPeriod)) {
             // Add the period
             updatedContent = fileContent.replace(lineWithoutPeriod, lineWithPeriod);
             console.log(`Period added to "${filePath}".`);
         } else {
-            console.log(`Neither "${lineToChange}" nor "${lineWithoutPeriod}" found in "${filePath}". No changes made.`);
+            console.log(`Neither "${lineWithPeriod}" nor "${lineWithoutPeriod}" found in "${filePath}". No changes made.`);
             return; // Exit if the line isn't found
         }
 
