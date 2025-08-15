@@ -27,7 +27,7 @@ jobs:
             ["update-product-names.js"]="src/productcatalogservice/products.json"
             ["editProductCalalogServiceMainGo.js"]="src/productcatalogservice/server.go"
             ["editPaymentService.js"]="src/paymentservice/charge.js src/paymentservice/index.js src/paymentservice/server.js" 
-            ["editRecommendationService.js"]="src/recommendationservice/recommendation_server.py"
+            ["editRecommendationService.js"]="src/recommendationservice/client.py src/recommendationservice/logger.py src/recommendationservice/recommendation_server.py"
             ["editShippingService.js"]="src/shippingservice/main.go"
             ["modifyFrontEndService.js"]="src/frontend/main.go src/frontend/middleware.go  src/frontend/handlers.go src/frontend/money/money.go"
             ["editEmailService.js"]="src/emailservice/email_client.py src/emailservice/email_server.py"
