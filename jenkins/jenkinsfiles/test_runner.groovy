@@ -83,6 +83,20 @@ pipeline {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 if (params.Run_all_tests || params.Playwright) {
+                    container('shell') {
+                        sh '''
+                            # Install Sealights Playwright plugin
+                            npm install --save-dev sealights-playwright-plugin
+
+                            # Configure Sealights to determine which tests to run
+                            npx sealights-playwright-plugin configure \
+                                --token $SL_TOKEN \
+                                --labid ${SL_LABID} \
+                                --appName boutique-playwright \
+                                --branch ${BRANCH}
+                        '''
+                    }
+
                     build(
                         job: "playwright-test",
                         parameters: [
@@ -98,6 +112,7 @@ pipeline {
         }
     }
 }
+
     stage('MS-Tests framework'){
       steps{
         script{
