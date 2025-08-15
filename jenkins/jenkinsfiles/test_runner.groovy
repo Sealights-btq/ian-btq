@@ -83,21 +83,21 @@ pipeline {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 if (params.Run_all_tests || params.Playwright) {
-                    sh """
-                        echo "Running Playwright tests on branch: ${params.BRANCH}"
-                        npm ci
-                        npx playwright install --with-deps
-                        SL_TOKEN=${SL_TOKEN} \
-                        SL_LABID=${params.SL_LABID} \
-                        MACHINE_DNS1=${env.MACHINE_DNS} \
-                        npx playwright test
-                    """
+                    build(
+                        job: "playwright-test",
+                        parameters: [
+                            string(name: 'BRANCH', value: "${params.BRANCH}"),
+                            string(name: 'SL_LABID', value: "${params.SL_LABID}"),
+                            string(name: 'SL_TOKEN', value: "${env.SL_TOKEN}"),
+                            string(name: 'MACHINE_DNS1', value: "${env.MACHINE_DNS}")
+                        ],
+                        propagate: false
+                    )
                 }
             }
         }
     }
 }
-
     stage('MS-Tests framework'){
       steps{
         script{
