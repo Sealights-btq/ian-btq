@@ -78,7 +78,7 @@ pipeline {
         }
       }
     }
-    ests framework'){
+    stage('MS-Tests framework'){
       steps{
         script{
           withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
