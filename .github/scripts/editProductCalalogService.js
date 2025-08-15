@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-if (process.argv.length !== 4) {
-  console.error("Usage: node editProductCatalogService.js <file_path1> <file_path2>");
+if (process.argv.length !== 3) {
+  console.error("Usage: node editProductCatalogService.js <file_path1>");
   process.exit(1);
 }
 
