@@ -85,11 +85,22 @@ pipeline {
                 if (params.Run_all_tests || params.Playwright) {
                     container('shell') {
                         sh '''
-                            # Install Sealights Playwright plugin
+                            # Install Node.js if not present
+                            if ! command -v node >/dev/null 2>&1; then
+                                echo "Installing Node.js..."
+                                curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                                apt-get install -y nodejs
+                            fi
+                            
+                            # Verify installation
+                            node --version
+                            npm --version
+                            
+                            # Install Playwright plugin
                             npm install --save-dev sealights-playwright-plugin
-
-                            # Configure Sealights to determine which tests to run
-                            npx sealights-playwright-plugin configure \
+                            
+                            # Configure using full path
+                            ./node_modules/.bin/sealights-playwright-plugin configure \
                                 --token $SL_TOKEN \
                                 --labid ${SL_LABID} \
                                 --appName boutique-playwright \
@@ -112,7 +123,6 @@ pipeline {
         }
     }
 }
-
     stage('MS-Tests framework'){
       steps{
         script{
@@ -131,7 +141,6 @@ pipeline {
         }
       }
     }
-
     stage('Cucumberjs framework starting'){
       steps{
         script{
