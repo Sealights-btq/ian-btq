@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 
 // Expect exactly 3 arguments after "node script.js"
-if (process.argv.length !== 6) {
-  console.error("Usage: node editShippingService.js <file1> <file2> <file3> <file4>");
+if (process.argv.length !== 5) {
+  console.error("Usage: node editShippingService.js <file1> <file2> <file3>");
   process.exit(1);
 }
 
