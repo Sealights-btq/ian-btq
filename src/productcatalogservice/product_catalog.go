@@ -26,6 +26,7 @@ import (
 )
 
 type productCatalog struct {
+	fmt.Println("Calling Function!")
 	catalog pb.ListProductsResponse
 }
 
