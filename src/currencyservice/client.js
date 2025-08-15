@@ -52,6 +52,7 @@ function _moneyToString (m) {
 }
 
 client.getSupportedCurrencies({}, (err, response) => {
+  console.log("Calling Function!");
   if (err) {
     logger.error(`Error in getSupportedCurrencies: ${err}`);
   } else {
