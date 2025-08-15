@@ -29,7 +29,7 @@ jobs:
             ["editPaymentService.js"]="src/paymentservice/charge.js src/paymentservice/index.js src/paymentservice/server.js" 
             ["editRecommendationService.js"]="src/recommendationservice/recommendation_server.py"
             ["editShippingService.js"]="src/shippingservice/main.go"
-            ["modifyFrontEndService.js"]="src/shippingservice/main.go"
+            ["modifyFrontEndService.js"]="src/frontend/main.go src/frontend/middleware.go  src/frontend/handlers.go src/frontend/money/money.go"
             ["editEmailService.js"]="src/emailservice/email_client.py src/emailservice/email_server.py"
             ["editCartService.js"]="src/cartservice/src/cartstore/RedisCartStore.cs src/cartservice/src/cartstore/AlloyDBCartStore.cs src/cartservice/src/cartstore/SpannerCartStore.cs"
             ["editCheckoutservice.js"]="src/checkoutservice/main.go"

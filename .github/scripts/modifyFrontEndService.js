@@ -1,40 +1,67 @@
 const fs = require('fs');
 
-async function modifyFile() {
-    // Check if a file path was provided as a command-line argument
-    if (process.argv.length < 3) {
-        console.error('Usage: node modifyFrontEndService.js <file_path>'); //
-        process.exit(1); // Exit with an error code
-    }
+async function modifyMainGo(filePath) {
+    const targetNoPeriod = 'log.Info("Tracing enabled")';
+    const targetWithPeriod = 'log.Info("Tracing enabled.")';
 
-    const filePath = process.argv[2]; // The file path is the third element in process.argv
+    await modifyLine(filePath, targetNoPeriod, targetWithPeriod, "main.go");
+}
 
-    // Define the line variations
-    const lineWithPeriod = 'log.Info("Tracing enabled.")';
-    const lineWithoutPeriod = 'log.Info("Tracing enabled")';
+async function modifyMiddlewareGo(filePath) {
+    const targetNoPeriod = '"http.resp.bytes":   rr.b}).Debugf("request complete")';
+    const targetWithPeriod = '"http.resp.bytes":   rr.b}).Debugf("request complete.")';
 
+    await modifyLine(filePath, targetNoPeriod, targetWithPeriod, "middleware.go");
+}
+
+async function modifyHandlersGo(filePath) {
+    const targetNoPeriod = 'fmt.Println("env platform is either empty or invalid")';
+    const targetWithPeriod = 'fmt.Println("env platform is either empty or invalid.")';
+
+    await modifyLine(filePath, targetNoPeriod, targetWithPeriod, "handlers.go");
+}
+
+async function modifyMoneyGo(filePath) {
+    const targetNoPeriod = 'ErrMismatchingCurrency = errors.New("mismatching currency codes")';
+    const targetWithPeriod = 'ErrMismatchingCurrency = errors.New("mismatching currency codes.")';
+
+    await modifyLine(filePath, targetNoPeriod, targetWithPeriod, "money.go");
+}
+
+async function modifyLine(filePath, noPeriod, withPeriod, fileLabel) {
     try {
         let fileContent = await fs.promises.readFile(filePath, 'utf8');
 
         let updatedContent;
-        if (fileContent.includes(lineWithPeriod)) {
-            // Remove the period
-            updatedContent = fileContent.replace(lineWithPeriod, lineWithoutPeriod);
-            console.log(`Period removed from "${filePath}".`);
-        } else if (fileContent.includes(lineWithoutPeriod)) {
-            // Add the period
-            updatedContent = fileContent.replace(lineWithoutPeriod, lineWithPeriod);
-            console.log(`Period added to "${filePath}".`);
+        if (fileContent.includes(withPeriod)) {
+            console.log(`No change: ${fileLabel} already has period.`);
+            return;
+        } else if (fileContent.includes(noPeriod)) {
+            updatedContent = fileContent.replace(noPeriod, withPeriod);
+            await fs.promises.writeFile(filePath, updatedContent, 'utf8');
+            console.log(`Period added in ${fileLabel}.`);
         } else {
-            console.log(`Neither "${lineWithPeriod}" nor "${lineWithoutPeriod}" found in "${filePath}". No changes made.`);
-            return; // Exit if the line isn't found
+            console.log(`Target line not found in ${fileLabel}.`);
         }
-
-        await fs.promises.writeFile(filePath, updatedContent, 'utf8');
-        console.log('File successfully updated!');
     } catch (error) {
-        console.error('Error modifying file:', error); // Basic error handling for file operations
+        console.error(`Error modifying ${fileLabel}:`, error);
     }
 }
 
-modifyFile();
+async function main() {
+    if (process.argv.length < 6) {
+        console.error('Usage: node modifyFiles.js <main.go> <middleware.go> <handlers.go> <money.go>');
+        process.exit(1);
+    }
+
+    const [mainGoPath, middlewareGoPath, handlersGoPath, moneyGoPath] = process.argv.slice(2);
+
+    await modifyMainGo(mainGoPath);
+    await modifyMiddlewareGo(middlewareGoPath);
+    await modifyHandlersGo(handlersGoPath);
+    await modifyMoneyGo(moneyGoPath);
+
+    console.log("Processing complete.");
+}
+
+main();
