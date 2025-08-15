@@ -106,6 +106,7 @@ function _getCurrencyData (callback) {
  * Helper function that handles decimal/fractional carrying
  */
 function _carry (amount) {
+  console.log("Calling Function!");
   const fractionSize = Math.pow(10, 9);
   amount.nanos += (amount.units % 1) * fractionSize;
   amount.units = Math.floor(amount.units) + Math.floor(amount.nanos / fractionSize);
