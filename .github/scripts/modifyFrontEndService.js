@@ -31,12 +31,15 @@ async function modifyMoneyGo(filePath) {
 async function modifyLine(filePath, noPeriod, withPeriod, fileLabel) {
     try {
         let fileContent = await fs.promises.readFile(filePath, 'utf8');
-
         let updatedContent;
+
         if (fileContent.includes(withPeriod)) {
-            console.log(`No change: ${fileLabel} already has period.`);
-            return;
+            // Remove the period
+            updatedContent = fileContent.replace(withPeriod, noPeriod);
+            await fs.promises.writeFile(filePath, updatedContent, 'utf8');
+            console.log(`Period removed in ${fileLabel}.`);
         } else if (fileContent.includes(noPeriod)) {
+            // Add the period
             updatedContent = fileContent.replace(noPeriod, withPeriod);
             await fs.promises.writeFile(filePath, updatedContent, 'utf8');
             console.log(`Period added in ${fileLabel}.`);
