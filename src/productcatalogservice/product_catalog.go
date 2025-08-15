@@ -26,7 +26,6 @@ import (
 )
 
 type productCatalog struct {
-	fmt.Println("Calling Function")
 	catalog pb.ListProductsResponse
 }
 
@@ -39,6 +38,7 @@ func (p *productCatalog) Watch(req *healthpb.HealthCheckRequest, ws healthpb.Hea
 }
 
 func (p *productCatalog) ListProducts(context.Context, *pb.Empty) (*pb.ListProductsResponse, error) {
+	fmt.Println("Calling Function")
 	time.Sleep(extraLatency)
 
 	return &pb.ListProductsResponse{Products: p.parseCatalog()}, nil
