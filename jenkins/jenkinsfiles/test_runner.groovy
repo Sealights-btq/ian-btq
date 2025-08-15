@@ -17,6 +17,7 @@ pipeline {
     string(name: 'SL_LABID', defaultValue: '', description: 'Lab_id')
     booleanParam(name: 'Run_all_tests', defaultValue: true, description: 'Checking this box will run all tests even if individual ones are not checked')
     booleanParam(name: 'Cypress', defaultValue: false, description: 'Run tests using Cypress testing framework')
+    booleanParam(name: 'Playwright', defaultValue: false, description: 'Run tests using Playwright testing framework') 
     booleanParam(name: 'MS', defaultValue: false, description: 'Run tests using MS testing framework')
     booleanParam(name: 'Cucumberjs', defaultValue: false, description: 'Run tests using Cucumberjs testing framework (maven)')
     booleanParam(name: 'NUnit', defaultValue: false, description: 'Run tests using NUnityour_dns testing framework')
@@ -77,6 +78,26 @@ pipeline {
         }
       }
     }
+    stage('Playwright framework starting') {
+    steps {
+        script {
+            withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
+                if (params.Run_all_tests || params.Playwright) {
+                    sh """
+                        echo "Running Playwright tests on branch: ${params.BRANCH}"
+                        npm ci
+                        npx playwright install --with-deps
+                        SL_TOKEN=${SL_TOKEN} \
+                        SL_LABID=${params.SL_LABID} \
+                        MACHINE_DNS1=${env.MACHINE_DNS} \
+                        npx playwright test
+                    """
+                }
+            }
+        }
+    }
+}
+
     stage('MS-Tests framework'){
       steps{
         script{
