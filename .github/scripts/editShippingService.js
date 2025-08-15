@@ -1,29 +1,37 @@
 const fs = require("fs");
 const path = require("path");
 
-if (process.argv.length < 3) {
-  console.error("Usage: node editShippingService.js <file>");
+// Expect exactly 3 arguments after "node script.js"
+if (process.argv.length !== 5) {
+  console.error("Usage: node editShippingService.js <file1> <file2> <file3>");
   process.exit(1);
 }
 
-const filePath = path.resolve(process.argv[2]);
+const filePaths = process.argv.slice(2).map(file => path.resolve(file));
 
-try {
-  let content = fs.readFileSync(filePath, "utf8");
+filePaths.forEach(filePath => {
+  try {
+    let content = fs.readFileSync(filePath, "utf8");
 
-  const target = 'log.Info("Tracing enabled, but temporarily unavailable")';
-  const targetWithPeriod = 'log.Info("Tracing enabled, but temporarily unavailable.")';
+    const targetWithExcl = 'fmt.Println("Calling Function!")';
+    const targetWithoutExcl = 'fmt.Println("Calling Function")';
 
-  // Only replace if it matches exactly without the period
-  if (content.includes(target)) {
-    content = content.replace(target, targetWithPeriod);
-    fs.writeFileSync(filePath, content, "utf8");
-    console.log(`Updated line in: ${filePath}`);
-  } else {
-    console.log(`No change needed in: ${filePath}`);
+    if (content.includes(targetWithExcl)) {
+      // Remove the exclamation mark
+      content = content.replace(targetWithExcl, targetWithoutExcl);
+      fs.writeFileSync(filePath, content, "utf8");
+      console.log(`Removed exclamation mark in: ${filePath}`);
+    } else if (content.includes(targetWithoutExcl)) {
+      // Add the exclamation mark
+      content = content.replace(targetWithoutExcl, targetWithExcl);
+      fs.writeFileSync(filePath, content, "utf8");
+      console.log(`Added exclamation mark in: ${filePath}`);
+    } else {
+      console.log(`No matching line found in: ${filePath}`);
+    }
+
+  } catch (err) {
+    console.error(`Error reading or writing file '${filePath}': ${err.message}`);
+    process.exit(1);
   }
-
-} catch (err) {
-  console.error(`Error reading or writing file: ${err.message}`);
-  process.exit(1);
-}
+});
