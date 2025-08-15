@@ -40,6 +40,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type CartItem struct {
+	fmt.Println("Calling Function!")
 	ProductId            string   `protobuf:"bytes,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Quantity             int32    `protobuf:"varint,2,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
