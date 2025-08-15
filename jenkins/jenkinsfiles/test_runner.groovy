@@ -83,31 +83,25 @@ pipeline {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 if (params.Run_all_tests || params.Playwright) {
-                    container('shell') {
-                        sh '''
-                            # Install Node.js if not present
-                            if ! command -v node >/dev/null 2>&1; then
-                                echo "Installing Node.js..."
-                                curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-                                apt-get install -y nodejs
-                            fi
-                            
-                            # Verify installation
-                            node --version
-                            npm --version
-                            
-                            # Install Playwright plugin
-                            npm install --save-dev sealights-playwright-plugin
-                            
-                            # Configure using full path
-                            ./node_modules/.bin/sealights-playwright-plugin configure \
-                                --token $SL_TOKEN \
-                                --labid ${SL_LABID} \
-                                --appName boutique-playwright \
-                                --branch ${BRANCH}
-                        '''
-                    }
-
+                    sh """
+                        echo 'Playwright framework starting ..... '
+                        export machine_dns="${env.MACHINE_DNS}"
+                        
+                        # Create working directory for Playwright tests
+                        mkdir -p playwright-setup
+                        cd playwright-setup
+                        
+                        # Initialize npm and install required packages
+                        npm init -y
+                        npm install slnodejs @playwright/test
+                        
+                        # Start Sealights session (following pattern from Mocha/Postman stages)
+                        ./node_modules/.bin/slnodejs start --labid ${params.SL_LABID} --token ${env.SL_TOKEN} --teststage "Playwright tests"
+                        
+                        cd ..
+                        sleep ${env.wait_time}
+                    """
+                    
                     build(
                         job: "playwright-test",
                         parameters: [
