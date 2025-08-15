@@ -34,7 +34,7 @@ jobs:
             ["editCartService.js"]="src/cartservice/src/cartstore/RedisCartStore.cs src/cartservice/src/cartstore/AlloyDBCartStore.cs src/cartservice/src/cartstore/SpannerCartStore.cs"
             ["editCheckoutservice.js"]="src/checkoutservice/main.go"
             ["editCurrencyservice.js"]="src/currencyservice/data/currency_conversion.json"
-            ["editCurrencyServiceServerFile.js"]="src/currencyservice/server.js"
+            ["editCurrencyServiceServerFile.js"]="src/currencyservice/client.js src/currencyservice/server.js"
           )
 
           for script in "${!edits[@]}"; do
