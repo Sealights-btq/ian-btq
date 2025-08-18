@@ -78,35 +78,41 @@ pipeline {
         }
       }
     }
-  stage('Playwright framework starting') {
+stage('Playwright framework starting') {
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 if (params.Run_all_tests || params.Playwright) {
                     container('shell') {
-                        sh '''
+                        sh '''#!/bin/bash
+                            set -e
+
                             echo "=== Installing Sealights Playwright plugin ==="
                             npm install --no-fund --no-audit --save-dev sealights-playwright-plugin
 
                             echo "=== Creating Node runner for Sealights configure ==="
                             cat > run-sl-playwright.js <<'EOF'
-                            const sl = require('sealights-playwright-plugin');
+const sl = require('sealights-playwright-plugin');
 
-                            (async () => {
-                              try {
-                                await sl.configure({
-                                  token: process.env.SL_TOKEN,
-                                  labid: process.env.SL_LABID,
-                                  appName: 'boutique-playwright',
-                                  branch: process.env.BRANCH || 'main',
-                                });
-                                console.log("Sealights configure finished successfully.");
-                              } catch (err) {
-                                console.error("Sealights configure failed:", err);
-                                process.exit(1);
-                              }
-                            })();
-                            EOF
+(async () => {
+  try {
+    console.log("Running Sealights configure with:");
+    console.log("  SL_LABID:", process.env.SL_LABID);
+    console.log("  BRANCH:", process.env.BRANCH);
+
+    await sl.configure({
+      token: process.env.SL_TOKEN,
+      labid: process.env.SL_LABID,
+      appName: 'boutique-playwright',
+      branch: process.env.BRANCH || 'main',
+    });
+    console.log("Sealights configure finished successfully.");
+  } catch (err) {
+    console.error("Sealights configure failed:", err);
+    process.exit(1);
+  }
+})();
+EOF
 
                             echo "=== Running Sealights configure via Node ==="
                             node run-sl-playwright.js
@@ -118,7 +124,7 @@ pipeline {
                         parameters: [
                             string(name: 'BRANCH', value: "${params.BRANCH}"),
                             string(name: 'SL_LABID', value: "${params.SL_LABID}"),
-                            string(name: 'SL_TOKEN', value: "${env.SL_TOKEN}"),
+                            string(name: 'SL_TOKEN', value: env.SL_TOKEN),
                             string(name: 'MACHINE_DNS1', value: "${env.MACHINE_DNS}")
                         ],
                         propagate: false
@@ -128,7 +134,6 @@ pipeline {
         }
     }
 }
-
 
     stage('MS-Tests framework'){
       steps{
