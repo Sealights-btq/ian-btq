@@ -78,19 +78,18 @@ pipeline {
         }
       }
     }
-    stage('Playwright framework starting') {
+   stage('Playwright framework starting') {
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 if (params.Run_all_tests || params.Playwright) {
                     container('shell') {
                         sh '''
-                            # Install Sealights Playwright plugin
-                            npm install --save-dev sealights-playwright-plugin
-                            export NODE_DEBUG=sl
-                            export SL_LOG_LEVEL=debug
-                            # Configure Sealights to determine which tests to run
-                            npx sealights-playwright-plugin configure \
+                            echo "=== Installing Sealights Playwright plugin ==="
+                            npm install --no-fund --no-audit --save-dev sealights-playwright-plugin
+
+                            echo "=== Running Sealights configure ==="
+                            ./node_modules/.bin/sealights-playwright-plugin configure \
                                 --token $SL_TOKEN \
                                 --labid ${SL_LABID} \
                                 --appName boutique-playwright \
@@ -113,6 +112,7 @@ pipeline {
         }
     }
 }
+
     stage('MS-Tests framework'){
       steps{
         script{
