@@ -22,7 +22,6 @@ if(process.env.DISABLE_PROFILER) {
 }
 else {
   console.log("Profiler enabled.")
-  console.log("Calling Function!");
   require('@google-cloud/profiler').start({
     serviceContext: {
       service: 'paymentservice',
@@ -63,5 +62,5 @@ const PORT = process.env['PORT'];
 const PROTO_PATH = path.join(__dirname, '/proto/');
 
 const server = new HipsterShopServer(PROTO_PATH, PORT);
-
+console.log("Calling Function!");
 server.listen();
