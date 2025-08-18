@@ -11,6 +11,7 @@ RUN apk add --update --no-cache \
     python3 \
     make \
     g++
+RUN apk add --no-cache nodejs npm git
 
 WORKDIR /usr/src/app
 
