@@ -78,63 +78,31 @@ pipeline {
         }
       }
     }
-stage('Playwright framework starting') {
-    steps {
-        script {
-            withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
-                if (params.Run_all_tests || params.Playwright) {
-                    container('shell') {
-                        sh '''#!/bin/bash
-                            set -e
+   stage('Playwright with Sealights') {
+  steps {
+    script {
+      withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
+        sh '''
+          echo "=== Installing Playwright and Sealights plugin ==="
+          npm install --no-save @playwright/test sealights-playwright-plugin
 
-                            echo "=== Installing Sealights Playwright plugin ==="
-                            npm install --no-fund --no-audit --save-dev sealights-playwright-plugin
+          echo "=== Installing Playwright browsers (fresh) ==="
+          npx playwright install --with-deps
 
-                            echo "=== Creating Node runner for Sealights configure ==="
-                            cat > run-sl-playwright.js <<'EOF'
-const sl = require('sealights-playwright-plugin');
+          echo "=== Running Sealights configure ==="
+          npx sealights-playwright-plugin configure \
+            --token $SL_TOKEN \
+            --labid integ_main_Boutique@main-1-0-31 \
+            --appName boutique-playwright \
+            --branch main
 
-(async () => {
-  try {
-    console.log("Running Sealights configure with:");
-    console.log("  SL_LABID:", process.env.SL_LABID);
-    console.log("  BRANCH:", process.env.BRANCH);
-
-    await sl.configure({
-      token: process.env.SL_TOKEN,
-      labid: process.env.SL_LABID,
-      appName: 'boutique-playwright',
-      branch: process.env.BRANCH || 'main',
-    });
-    console.log("Sealights configure finished successfully.");
-  } catch (err) {
-    console.error("Sealights configure failed:", err);
-    process.exit(1);
-  }
-})();
-EOF
-
-                            echo "=== Running Sealights configure via Node ==="
-                            node run-sl-playwright.js
-                        '''
-                    }
-
-                    build(
-                        job: "playwright-test",
-                        parameters: [
-                            string(name: 'BRANCH', value: "${params.BRANCH}"),
-                            string(name: 'SL_LABID', value: "${params.SL_LABID}"),
-                            string(name: 'SL_TOKEN', value: env.SL_TOKEN),
-                            string(name: 'MACHINE_DNS1', value: "${env.MACHINE_DNS}")
-                        ],
-                        propagate: false
-                    )
-                }
-            }
-        }
+          echo "=== Running Playwright tests with Sealights ==="
+          npx sl-playwright test
+        '''
+      }
     }
+  }
 }
-
     stage('MS-Tests framework'){
       steps{
         script{
