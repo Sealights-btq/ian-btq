@@ -15,52 +15,39 @@
 FROM node:20.5.0-alpine@sha256:11087abe911baf2fd7e34192f4598bf7e438239e9914f5b7ecda5fb5a7b1a2dd as base
 
 FROM base as builder
+
 ARG SEALIGHTS_TOKEN
 ARG BRANCH
 ARG BUILD_NAME=0.4.3
 ENV SEALIGHTS_NODE_AGENT=slnodejs
-
 # Some packages (e.g. @google-cloud/profiler) require additional
-# deps for post-install scripts. Adding git for Sealights scan
+# deps for post-install scripts
 RUN apk add --update --no-cache \
     python3 \
     make \
-    g++ \
-    git
+    g++
 
 WORKDIR /usr/src/app
+
 #COPY package*.json ./
 COPY . .
 RUN npm install --only=production
-
 #Install the agent (Not a url)
 RUN npm i ${SEALIGHTS_NODE_AGENT}
-
 #Run config to get build session id
-RUN ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
-
-# Initialize git repository for Sealights scan with better error handling
-RUN git config --global init.defaultBranch main && \
-    git config --global user.email "build@sealights.com" && \
-    git config --global user.name "Sealights Build" && \
-    git init . && \
-    git add . && \
-    git commit -m "Initial commit for Sealights scan" || \
-    (echo "Git commit failed, but continuing..." && git status)
-
+RUN  ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
 #Scan the code
-RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --es6Modules
+RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm none --es6Modules
 
 FROM base
-WORKDIR /usr/src/app
 
+WORKDIR /usr/src/app
 #Copy the build session id file
 COPY --from=builder /usr/src/app/buildSessionId .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY . .
 
+COPY . .
 ENV NODE_DEBUG=sl
 EXPOSE 50051
-
 #Run code with sealights
-CMD ./node_modules/.bin/slnodejs run --token "${SL_TOKEN}" --buildsessionidfile buildSessionId --labid "${SL_LAB_ID}" --workspacepath . index.js
+CMD  ./node_modules/.bin/slnodejs run --token "${SL_TOKEN}" --buildsessionidfile buildSessionId --labid "${SL_LAB_ID}" --workspacepath . index.js
