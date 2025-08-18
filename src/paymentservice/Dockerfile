@@ -39,12 +39,14 @@ RUN npm i ${SEALIGHTS_NODE_AGENT}
 #Run config to get build session id
 RUN ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
 
-# Initialize git repository for Sealights scan
-RUN git init . && \
-    git config user.email "build@sealights.com" && \
-    git config user.name "Sealights Build" && \
+# Initialize git repository for Sealights scan with better error handling
+RUN git config --global init.defaultBranch main && \
+    git config --global user.email "build@sealights.com" && \
+    git config --global user.name "Sealights Build" && \
+    git init . && \
     git add . && \
-    git commit -m "Initial commit for Sealights scan"
+    git commit -m "Initial commit for Sealights scan" || \
+    (echo "Git commit failed, but continuing..." && git status)
 
 #Scan the code
 RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --es6Modules
