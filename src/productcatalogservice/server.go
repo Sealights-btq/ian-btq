@@ -67,6 +67,8 @@ func init() {
 }
 
 func main() {
+
+	fmt.Println("Hello, world!")
 	if os.Getenv("ENABLE_TRACING") == "1" {
 		err := initTracing()
 		if err != nil {
