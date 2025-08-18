@@ -78,7 +78,7 @@ pipeline {
         }
       }
     }
-   stage("Playwright + Sealights Setup & Run") {
+    stage("Playwright + Sealights Setup & Run") {
       when {
         expression { params.Run_all_tests || params.Playwright }
       }
@@ -111,7 +111,6 @@ pipeline {
     }
   }
 }
-
     stage('MS-Tests framework'){
       steps{
         script{
@@ -529,4 +528,3 @@ pipeline {
     }
   }
 }
-
