@@ -16,6 +16,7 @@ package main
 
 import (
 	"context"
+	"fmt"  // ADD THIS LINE for fmt.Println
 	"strings"
 	"time"
 
@@ -30,6 +31,7 @@ type productCatalog struct {
 }
 
 func (p *productCatalog) Check(ctx context.Context, req *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error) {
+	fmt.Println("Calling Function") 
 	return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING}, nil
 }
 
