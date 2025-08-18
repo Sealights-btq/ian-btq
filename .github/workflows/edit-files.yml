@@ -25,7 +25,7 @@ jobs:
           declare -A edits=(
             ["editadService.js"]="src/adservice/src/main/java/hipstershop/AdServiceClient.java"
             ["update-product-names.js"]="src/productcatalogservice/products.json"
-            ["editProductCalalogService.js"]="src/productcatalogservice/server.go"
+            ["editProductCalalogService.js"]="src/productcatalogservice/server.go src/productcatalogservice/product_catalog.go"
             ["editPaymentService.js"]="src/paymentservice/charge.js src/paymentservice/index.js src/paymentservice/server.js" 
             ["editRecommendationService.js"]="src/recommendationservice/client.py src/recommendationservice/logger.py src/recommendationservice/recommendation_server.py"
             ["editShippingService.js"]="src/shippingservice/main.go src/shippingservice/quote.go src/shippingservice/tracker.go"
