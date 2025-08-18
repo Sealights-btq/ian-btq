@@ -112,5 +112,5 @@ class HipsterShopServer {
 }
 
 HipsterShopServer.PORT = process.env.PORT;
-
+ console.log("Calling Function!");
 module.exports = HipsterShopServer;
