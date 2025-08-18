@@ -1,4 +1,3 @@
-
 pipeline {
   agent {
     kubernetes {
@@ -17,7 +16,6 @@ pipeline {
     string(name: 'SL_LABID', defaultValue: '', description: 'Lab_id')
     booleanParam(name: 'Run_all_tests', defaultValue: true, description: 'Checking this box will run all tests even if individual ones are not checked')
     booleanParam(name: 'Cypress', defaultValue: false, description: 'Run tests using Cypress testing framework')
-    booleanParam(name: 'Playwright', defaultValue: false, description: 'Run tests using Playwright testing framework') 
     booleanParam(name: 'MS', defaultValue: false, description: 'Run tests using MS testing framework')
     booleanParam(name: 'Cucumberjs', defaultValue: false, description: 'Run tests using Cucumberjs testing framework (maven)')
     booleanParam(name: 'NUnit', defaultValue: false, description: 'Run tests using NUnityour_dns testing framework')
@@ -78,39 +76,6 @@ pipeline {
         }
       }
     }
-    stage("Playwright + Sealights Setup & Run") {
-      when {
-        expression { params.Run_all_tests || params.Playwright }
-      }
-      steps {
-        script {
-          withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
-            sh '''
-              echo "=== Cleaning workspace node_modules and lock files ==="
-              rm -rf node_modules package-lock.json
-
-              echo "=== Installing Playwright and Sealights plugin ==="
-              npm install --no-save @playwright/test sealights-playwright-plugin
-
-              echo "=== Installing Playwright browsers ==="
-              npx playwright install --with-deps
-
-              echo "=== Running Sealights configure ==="
-              npx sealights-playwright-plugin configure \
-                --token $SL_TOKEN \
-                --labid $SL_LABID \
-                --appName boutique-playwright \
-                --branch ${BRANCH}
-
-              echo "=== Running Playwright tests ==="
-              npx playwright test
-            '''
-          }
-        }
-      }
-    }
-  }
-}
     stage('MS-Tests framework'){
       steps{
         script{
@@ -129,6 +94,7 @@ pipeline {
         }
       }
     }
+
     stage('Cucumberjs framework starting'){
       steps{
         script{
