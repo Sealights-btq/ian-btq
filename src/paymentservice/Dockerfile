@@ -25,7 +25,8 @@ ENV SEALIGHTS_NODE_AGENT=slnodejs
 RUN apk add --update --no-cache \
     python3 \
     make \
-    g++
+    g++ \
+    git
 
 WORKDIR /usr/src/app
 
