@@ -78,7 +78,7 @@ pipeline {
         }
       }
     }
-   stage('Playwright framework starting') {
+  stage('Playwright framework starting') {
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
@@ -88,12 +88,28 @@ pipeline {
                             echo "=== Installing Sealights Playwright plugin ==="
                             npm install --no-fund --no-audit --save-dev sealights-playwright-plugin
 
-                            echo "=== Running Sealights configure ==="
-                            ./node_modules/.bin/sealights-playwright-plugin configure \
-                                --token $SL_TOKEN \
-                                --labid ${SL_LABID} \
-                                --appName boutique-playwright \
-                                --branch ${BRANCH}
+                            echo "=== Creating Node runner for Sealights configure ==="
+                            cat > run-sl-playwright.js <<'EOF'
+                            const sl = require('sealights-playwright-plugin');
+
+                            (async () => {
+                              try {
+                                await sl.configure({
+                                  token: process.env.SL_TOKEN,
+                                  labid: process.env.SL_LABID,
+                                  appName: 'boutique-playwright',
+                                  branch: process.env.BRANCH || 'main',
+                                });
+                                console.log("Sealights configure finished successfully.");
+                              } catch (err) {
+                                console.error("Sealights configure failed:", err);
+                                process.exit(1);
+                              }
+                            })();
+                            EOF
+
+                            echo "=== Running Sealights configure via Node ==="
+                            node run-sl-playwright.js
                         '''
                     }
 
@@ -112,6 +128,7 @@ pipeline {
         }
     }
 }
+
 
     stage('MS-Tests framework'){
       steps{
