@@ -31,9 +31,6 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 
-# explicitly include .git for Sealights scanning
-COPY .git .git
-
 #Downloading the agents 
 RUN wget -U "slgoagent" -q -O slgoagent.tar.gz \
    ${AGENT_URL} \
