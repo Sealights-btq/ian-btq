@@ -13,7 +13,13 @@ pipeline {
   parameters {
     string(name: 'TAG', defaultValue: '1.2.2', description: 'latest tag')
     string(name: 'BRANCH', defaultValue: 'main', description: 'default branch')
-    choice(name: 'SERVICE', choices: ["adservice","cartservice","checkoutservice", "currencyservice","emailservice","frontend","paymentservice","productcatalogservice","recommendationservice","shippingservice","sealightsservice"], description: 'Service name to build')
+    choice(name: 'SERVICE', choices: [
+      "adservice","cartservice","checkoutservice",
+      "currencyservice","emailservice","frontend",
+      "paymentservice","productcatalogservice",
+      "recommendationservice","shippingservice",
+      "sealightsservice"
+    ], description: 'Service name to build')
     string(name: 'BUILD_NAME', defaultValue: 'none', description: 'build name')
   }
 
@@ -46,6 +52,19 @@ pipeline {
                   def BUILD_NAME = "${params.BUILD_NAME}"
                   def SL_TOKEN = env.SL_TOKEN
 
+                  // Copy .git into the service context so the scanner can see repo metadata
+                  sh """
+                    echo "Checking .git before copy..."
+                    ls -la .git || echo ".git not found at repo root!"
+
+                    echo "Copying .git into ${CONTEXT}"
+                    cp -r .git ${CONTEXT}/.git
+
+                    echo "Confirming .git is inside context:"
+                    ls -la ${CONTEXT}/.git || echo ".git copy failed!"
+                  """
+
+                  // Run Kaniko build with .git included
                   sh """
                       /kaniko/executor \
                       --context ${CONTEXT} \
