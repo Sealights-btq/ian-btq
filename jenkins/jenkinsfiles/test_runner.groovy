@@ -87,8 +87,7 @@ pipeline {
                             set -e
 
                             echo "=== Installing Sealights Playwright plugin ==="
-                            npm install --no-fund --no-audit --save-dev sealights-playwright-plugin
-                            npm list @playwright/test
+                            npm i sealights-playwright-plugin
                             npx playwright --version
                             pwd 
 
