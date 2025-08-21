@@ -1,5 +1,7 @@
 const fs = require("fs");
 
+// Ian Flanagan Tricentis 2025
+
 // Require exactly three arguments (paths to files)
 const files = process.argv.slice(2);
 if (files.length !== 3) {
