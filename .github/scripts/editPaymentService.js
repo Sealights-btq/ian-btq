@@ -2,6 +2,8 @@
 const fs = require('fs');
 const path = require('path');
 
+// Ian Flanagan Tricentis 2025
+
 // Check for 3 file paths as arguments
 if (process.argv.length < 5) { // process.argv includes 'node' and the script file itself
   console.error('Usage: node editPaymentService.js <path-to-file1.js> <path-to-file2.js> <path-to-file3.js>');
