@@ -94,7 +94,7 @@ pipeline {
                         npm install --save-dev sealights-playwright-plugin
 
                         echo 'Running Playwright tests with Sealights reporter...'
-                        npx playwright test
+                        npx playwright test --project=chromium
 
                         sleep ${env.wait_time}
                     """
