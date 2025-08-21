@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+// Ian Flanagan Tricentis 2025
+
 // --- Require exactly 2 file paths ---
 const file1Path = process.argv[2];
 const file2Path = process.argv[3];
