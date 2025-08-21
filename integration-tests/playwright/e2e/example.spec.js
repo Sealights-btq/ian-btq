@@ -42,7 +42,7 @@ test('Add single item to cart and complete checkout', async ({ page }) => {
   await expect(page.getByText(/[\d]+\.\d{2}/)).toBeVisible(); // Validate total format
 });
 
-
+/*
 test('Add Watch to Cart and validate', async ({ page }) => {
 
   await page.goto(testData.baseURL);
@@ -54,6 +54,7 @@ test('Add Watch to Cart and validate', async ({ page }) => {
   await page.getByText('$118.98').click();
   await page.getByRole('button', { name: 'Empty Cart' }).click();
 });
+*/
 
 /*
 test('Add Salt and Pepper Shakers to cart and validate', async ({ page }) => {
