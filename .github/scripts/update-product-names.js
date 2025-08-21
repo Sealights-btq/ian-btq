@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+// Ian Flanagan Tricentis 2025
+
 if (process.argv.length < 3) {
   console.error("Usage: node update-product-names.js <path-to-json-file>");
   process.exit(1);
