@@ -2,6 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 
+// Ian Flanagan Tricentis 2025
+
 // Check if exactly one file path argument is provided
 if (process.argv.length !== 4) {
   console.error("Usage: node editProductCatalogService.js <file_path> <file_path>2");
