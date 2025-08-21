@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+// Ian Flanagan Tricentis 2025
 
 if (process.argv.length < 4) {
   console.error("Usage: node editEmailService.js <path_to_email_client.py> <path_to_email_server.py>");
