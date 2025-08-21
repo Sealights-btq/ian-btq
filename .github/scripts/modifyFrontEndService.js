@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+// Ian Flanagan Tricentis 2025
+
 async function modifyMainGo(filePath) {
     const targetNoPeriod = 'log.Info("Tracing enabled")';
     const targetWithPeriod = 'log.Info("Tracing enabled.")';
