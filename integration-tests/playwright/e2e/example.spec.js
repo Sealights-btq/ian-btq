@@ -1,5 +1,6 @@
 // @ts-check
 const { test } = require('sealights-playwright-plugin');
+const { expect } = require('@playwright/test'); 
 // const { test, expect } = require('@playwright/test');
 //const { test } = require('@playwright/test');
 const config = require('./config');
