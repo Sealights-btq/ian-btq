@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+// Ian Flanagan Tricentis 2025
+
 // Get the file path from the command-line arguments
 // process.argv[0] is 'node', process.argv[1] is the script file path
 // So, the first argument passed by the user will be at index 2
