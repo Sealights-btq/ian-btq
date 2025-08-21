@@ -78,33 +78,31 @@ pipeline {
       }
     }
     stage('Playwright with Sealights') {
-    agent {
-        kubernetes {
-            yaml readTrusted('jenkins/pod-templates/test_runner_pod.yaml')
-        }
-    }
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 withEnv([
-                    "SL_LAB_ID=${params.SL_LAB_ID ?: 'default-lab-id'}",
-                    "SL_TEST_STAGE=playwright"
+                    "SL_LABID=${params.SL_LABID ?: 'default-lab-id'}",
+                    "SL_TEST_STAGE=Playwright tests"
                 ]) {
-                    container('node') {
-                        sh '''
-                            echo "Installing Sealights Playwright plugin..."
-                            npm install sealights-playwright-plugin
+                    sh """
+                        echo 'Installing Sealights Playwright plugin...'
+                        cd integration-tests/playwright/e2e
+                        npm install
+                        npm install sealights-playwright-plugin
 
-                            echo "Running Playwright tests with Sealights reporting..."
-                            npx playwright test
-                        '''
-                    }
+                        echo \${SL_TOKEN} > sltoken.txt
+
+                        echo 'Running Playwright tests with Sealights reporting...'
+                        npx sl-playwright --tokenfile ./sltoken.txt --labid \${SL_LABID} --testStage "\${SL_TEST_STAGE}" -- npx playwright test
+
+                        sleep ${env.wait_time}
+                    """
                 }
             }
         }
     }
 }
-
     stage('MS-Tests framework'){
       steps{
         script{
