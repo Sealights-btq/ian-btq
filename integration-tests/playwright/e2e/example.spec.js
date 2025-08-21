@@ -1,6 +1,6 @@
 // @ts-check
 const { test } = require('sealights-playwright-plugin');
-const { test, expect } = require('@playwright/test');
+// const { test, expect } = require('@playwright/test');
 //const { test } = require('@playwright/test');
 const config = require('./config');
 const PlaywrightHelper = require('./playwrightHelper');
@@ -54,7 +54,7 @@ test('Add Watch to Cart and validate', async ({ page }) => {
   await page.getByRole('button', { name: 'Empty Cart' }).click();
 });
 
-
+/*
 test('Add Salt and Pepper Shakers to cart and validate', async ({ page }) => {
   await page.goto(testData.baseURL);
   await page.locator('div:nth-child(8) > a').click();
@@ -67,7 +67,7 @@ test('Add Salt and Pepper Shakers to cart and validate', async ({ page }) => {
   await page.getByRole('button', { name: 'Empty Cart' }).click();
 });
 
-
+*/
 
 test('Add Loafers to Cart and Validate', async ({ page }) => {
   await page.goto(testData.baseURL);

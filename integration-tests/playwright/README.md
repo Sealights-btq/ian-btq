@@ -1,5 +1,24 @@
 # playwright
 
+to setup to report to Sealights
+
+https://www.npmjs.com/package/sealights-playwright-plugin
+
+1. install the plugin 
+
+npm i sealights-playwright-plugin
+
+2. export env variables 
+
+export SL_TOKEN=<your-sl-token>
+export SL_LAB_ID=<your-lab-id>
+export SL_TEST_STAGE=playwright
+
+
+3. Run tests 
+
+npx playwright test
+
 tests created in playwright 
 
 Follow the docs to setup https://playwright.dev/docs/intro

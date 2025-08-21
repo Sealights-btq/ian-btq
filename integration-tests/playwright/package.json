@@ -9,7 +9,8 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.43.0",
-    "@types/node": "^20.12.7"
+    "@types/node": "^20.12.7",
+    "sealights-playwright-plugin": "^2.0.121"
   },
   "dependencies": {
     "playwright": "^1.43.0"
