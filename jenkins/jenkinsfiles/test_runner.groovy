@@ -77,7 +77,7 @@ pipeline {
         }
       }
     }
-    stage('Playwright with Sealights') {
+  stage('Playwright with Sealights') {
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
@@ -89,12 +89,10 @@ pipeline {
                         echo 'Installing Sealights Playwright plugin...'
                         cd integration-tests/playwright/e2e
                         npm install
-                        npm install sealights-playwright-plugin
+                        npm install --save-dev sealights-playwright-plugin
 
-                        echo \${SL_TOKEN} > sltoken.txt
-
-                        echo 'Running Playwright tests with Sealights reporting...'
-                        npx sl-playwright --tokenfile ./sltoken.txt --labid \${SL_LABID} --testStage "\${SL_TEST_STAGE}" -- npx playwright test
+                        echo 'Running Playwright tests with Sealights reporter...'
+                        npx playwright test
 
                         sleep ${env.wait_time}
                     """
