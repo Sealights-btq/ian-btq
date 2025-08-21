@@ -77,6 +77,34 @@ pipeline {
         }
       }
     }
+    stage('Playwright with Sealights') {
+    agent {
+        kubernetes {
+            yaml readTrusted('jenkins/pod-templates/test_runner_pod.yaml')
+        }
+    }
+    steps {
+        script {
+            withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
+                withEnv([
+                    "SL_LAB_ID=${params.SL_LAB_ID ?: 'default-lab-id'}",
+                    "SL_TEST_STAGE=playwright"
+                ]) {
+                    container('node') {
+                        sh '''
+                            echo "Installing Sealights Playwright plugin..."
+                            npm install sealights-playwright-plugin
+
+                            echo "Running Playwright tests with Sealights reporting..."
+                            npx playwright test
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
+
     stage('MS-Tests framework'){
       steps{
         script{
