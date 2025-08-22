@@ -82,7 +82,7 @@ pipeline {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 withEnv([
-                    "SL_LABID=${params.SL_LABID ?: 'default-lab-id'}",
+                    "SL_LAB_ID=${params.SL_LABID ?: 'default-lab-id'}",
                     "SL_TEST_STAGE=Playwright tests"
                 ]) {
                     sh """
