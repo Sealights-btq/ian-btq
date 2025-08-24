@@ -29,7 +29,7 @@ COPY ../../ .
 #run config to get build session id
 RUN sl-python config --appname emailservice --branchname ${BRANCH} --buildname ${BUILD_NAME} --workspacepath ./src/emailservice --token ${SEALIGHTS_TOKEN} --exclude "*grpc*"
 #scan the code
-RUN sl-python scan --scm git --scmBaseUrl "https://github.com/Sealights-btq/ian-btq/tree/$BRANCH/src/emailservice" --token ${SEALIGHTS_TOKEN}
+RUN sl-python scan --scm git --scmProvider github --scmBaseUrl "https://github.com/Sealights-btq/ian-btq/tree/$BRANCH/src/emailservice" --token ${SEALIGHTS_TOKEN}
 ENV SL_DEBUG=true
 
 # Add the application
