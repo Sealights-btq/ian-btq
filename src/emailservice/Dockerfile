@@ -25,15 +25,15 @@ ENV ENABLE_PROFILER=1
 COPY --from=builder /usr/local/lib/python3.10/ /usr/local/lib/python3.10/
 WORKDIR /email_server
 #Important to copy code here before running the scan, otherwise it won't scan the code
-COPY . .
+COPY ../../ .
 #run config to get build session id
-RUN sl-python config --appname emailservice --branchname ${BRANCH} --buildname ${BUILD_NAME} --workspacepath ./ --token ${SEALIGHTS_TOKEN} --exclude "*grpc*"
+RUN sl-python config --appname emailservice --branchname ${BRANCH} --buildname ${BUILD_NAME} --workspacepath ./src/emailservice --token ${SEALIGHTS_TOKEN} --exclude "*grpc*"
 #scan the code
-RUN sl-python scan --scm none --token ${SEALIGHTS_TOKEN}
+RUN sl-python scan --scm git --token ${SEALIGHTS_TOKEN}
 ENV SL_DEBUG=true
 
 # Add the application
 ENV PORT "8080"
-EXPOSE 8080 
+EXPOSE 8080
 #use sl-python to run the code
 CMD sl-python run python email_server.py --labid ${SL_LAB_ID} --token ${SL_TOKEN}
