@@ -15,12 +15,15 @@ module.exports = defineConfig({
   reporter: [
     ['list'], // prints results to console
     ['html'], // keep HTML report
-    ['sealights-playwright-plugin', {
-      token: process.env.SL_TOKEN,
-      buildSessionId: process.env.SL_BUILD_SESSION_ID,
-      labId: process.env.SL_LABID,
-      testStage: process.env.SL_TEST_STAGE || 'Playwright tests'
-    }]
+    [
+      require.resolve('sealights-playwright-plugin'),
+      {
+        token: process.env.SL_TOKEN,
+        buildSessionId: process.env.SL_BUILD_SESSION_ID,
+        labId: process.env.SL_LABID,
+        testStage: process.env.SL_TEST_STAGE || 'Playwright tests'
+      }
+    ]
   ],
 
   use: {
