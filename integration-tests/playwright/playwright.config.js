@@ -1,3 +1,5 @@
+
+
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 
@@ -22,6 +24,9 @@ module.exports = defineConfig({
         buildSessionId: process.env.SL_BUILD_SESSION_ID,
         labId: process.env.SL_LABID,
         testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
+        onReporterLoad: () => {
+          console.log('Sealights reporter loaded successfully');
+        },
       },
     ],
   ],
