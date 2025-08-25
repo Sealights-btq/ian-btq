@@ -93,6 +93,8 @@ pipeline {
                         npx playwright install chromium
                         npx playwright install-deps
                         npm install --save-dev sealights-playwright-plugin
+                        npm ls sealights-playwright-plugin
+                        cat node_modules/sealights-playwright-plugin/index.js | head -20
                         echo 'Running Playwright tests with Sealights reporter...'
                         npx playwright test
                         
