@@ -16,20 +16,20 @@ module.exports = defineConfig({
     ['list'], // prints results to console
     ['html'], // keep HTML report
     [
-      require.resolve('sealights-playwright-plugin'),
+      'sealights-playwright-plugin',
       {
         token: process.env.SL_TOKEN,
         buildSessionId: process.env.SL_BUILD_SESSION_ID,
         labId: process.env.SL_LABID,
-        testStage: process.env.SL_TEST_STAGE || 'Playwright tests'
-      }
-    ]
+        testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
+      },
+    ],
   ],
 
   use: {
     trace: 'on-first-retry',
     screenshot: 'on',
-    video: 'on'
+    video: 'on',
   },
 
   projects: [
