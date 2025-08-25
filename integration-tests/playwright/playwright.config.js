@@ -2,6 +2,16 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
+ * Log Sealights reporter config before Playwright runs
+ */
+console.log('ℹ️ Initializing Sealights reporter with config:', {
+  token: process.env.SL_TOKEN ? '***' : 'MISSING',
+  buildSessionId: process.env.SL_BUILD_SESSION_ID || 'MISSING',
+  labId: process.env.SL_LABID || 'MISSING',
+  testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
+});
+
+/**
  * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
@@ -22,7 +32,6 @@ module.exports = defineConfig({
         buildSessionId: process.env.SL_BUILD_SESSION_ID,
         labId: process.env.SL_LABID,
         testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
-        onReporterLoad: () => console.log('✅ Sealights reporter loaded successfully'),
       }
     ]
   ],
