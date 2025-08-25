@@ -1,5 +1,3 @@
-
-
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 
@@ -24,17 +22,15 @@ module.exports = defineConfig({
         buildSessionId: process.env.SL_BUILD_SESSION_ID,
         labId: process.env.SL_LABID,
         testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
-        onReporterLoad: () => {
-          console.log('Sealights reporter loaded successfully');
-        },
-      },
-    ],
+        onReporterLoad: () => console.log('✅ Sealights reporter loaded successfully'),
+      }
+    ]
   ],
 
   use: {
     trace: 'on-first-retry',
     screenshot: 'on',
-    video: 'on',
+    video: 'on'
   },
 
   projects: [
@@ -49,6 +45,6 @@ module.exports = defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    },
-  ],
+    }
+  ]
 });
