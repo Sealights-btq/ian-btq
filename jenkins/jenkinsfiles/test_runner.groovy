@@ -94,7 +94,12 @@ pipeline {
                         npx playwright install-deps
                         npm install --save-dev sealights-playwright-plugin
                         npm ls sealights-playwright-plugin
-                        cat node_modules/sealights-playwright-plugin/index.js | head -20
+                        echo "Checking Node.js version..."
+                        node -v
+                        echo "Checking npm version..."
+                        npm -v
+                        echo "Checking Playwright version..."
+                        npx playwright --version
                         echo 'Running Playwright tests with Sealights reporter...'
                         npx playwright test
                         
