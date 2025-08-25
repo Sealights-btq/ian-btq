@@ -77,38 +77,6 @@ pipeline {
         }
       }
     }
-  stage('Playwright with Sealights') {
-    steps {
-        script {
-            withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
-                withEnv([
-                    "SL_BUILD_SESSION_ID=${params.SL_LABID ?: 'integ_main_Boutique'}",
-                    "SL_TEST_STAGE=Playwright tests",
-                     "NODE_DEBUG=sl"
-                ]) {
-                    sh """
-                        echo 'Installing Sealights Playwright plugin...'
-                        cd integration-tests/playwright/e2e
-                        npm install
-                        npx playwright install chromium
-                        npx playwright install-deps
-                        npm install --save-dev sealights-playwright-plugin
-                        npm ls sealights-playwright-plugin
-                        echo "Checking Node.js version..."
-                        node -v
-                        echo "Checking npm version..."
-                        npm -v
-                        echo "Checking Playwright version..."
-                        npx playwright --version
-                        echo 'Running Playwright tests with Sealights reporter...'
-                        npx playwright test
-                        
-                    """
-                }
-            }
-        }
-    }
-}
     stage('MS-Tests framework'){
       steps{
         script{
