@@ -2,16 +2,6 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
- * Log Sealights reporter config before Playwright runs
- */
-console.log('ℹ️ Initializing Sealights reporter with config:', {
-  token: process.env.SL_TOKEN ? '***' : 'MISSING',
-  buildSessionId: process.env.SL_BUILD_SESSION_ID || 'MISSING',
-  labId: process.env.SL_LABID || 'MISSING',
-  testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
-});
-
-/**
  * @see https://playwright.dev/docs/test-configuration
  */
 module.exports = defineConfig({
@@ -20,28 +10,16 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-
-  /* Reporters */
+  /* Reporters - removed Sealights reporter, using plugin in tests instead */
   reporter: [
     ['list'], // prints results to console
     ['html'], // keep HTML report
-    [
-      'sealights-playwright-plugin',
-      {
-        token: process.env.SL_TOKEN,
-        buildSessionId: process.env.SL_BUILD_SESSION_ID,
-        labId: process.env.SL_LABID,
-        testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
-      }
-    ]
   ],
-
   use: {
     trace: 'on-first-retry',
     screenshot: 'on',
     video: 'on'
   },
-
   projects: [
     {
       name: 'chromium',
