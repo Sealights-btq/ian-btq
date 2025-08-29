@@ -66,7 +66,7 @@ pipeline {
         }
       }
     }
-stage('Playwright with Sealights') {
+      stage('Playwright with Sealights') {
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
@@ -89,8 +89,17 @@ stage('Playwright with Sealights') {
                         npm -v
                         echo "Checking Playwright version..."
                         npx playwright --version
+
+          					    echo 'Environment variables:'
+          					    echo "SL_TOKEN: ${process.env.SL_TOKEN ? 'SET' : 'NOT SET'}"
+          					    echo "SL_BUILD_SESSION_ID: $SL_BUILD_SESSION_ID"
+          					    echo "SL_TEST_STAGE: $SL_TEST_STAGE"
+          					    echo "NODE_DEBUG: $NODE_DEBUG"         
+          					    echo 'Verifying Playwright config...'
+          					    cd integration-tests/playwright
+          					    node -e "console.log('Config loaded:', require('./playwright.config.js'))"       
                         echo 'Running Playwright tests with Sealights reporter...'
-                        npx playwright test
+                        npx playwright test --reporter=list
                         
                     """
                 }
