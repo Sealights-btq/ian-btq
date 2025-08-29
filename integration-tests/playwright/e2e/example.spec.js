@@ -1,6 +1,6 @@
 // @ts-check
 // Try using Sealights as test wrapper instead of reporter
-const { test, expect } = require('sealights-playwright-plugin');
+const { test } = require('sealights-playwright-plugin');
 const config = require('./config');
 const PlaywrightHelper = require('./playwrightHelper');
 
