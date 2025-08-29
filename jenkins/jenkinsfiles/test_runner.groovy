@@ -108,7 +108,7 @@ pipeline {
                         
                         echo 'Running Playwright tests with Sealights integration...'
                         echo 'Note: Using Sealights as test wrapper instead of reporter due to compatibility'
-                        npx playwright test --reporter=list
+                        npx playwright test 
                     """
                 }
             }
