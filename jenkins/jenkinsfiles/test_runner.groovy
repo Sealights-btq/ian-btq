@@ -76,21 +76,25 @@ pipeline {
                     "NODE_DEBUG=sl"
                 ]) {
                     sh """
-                        echo 'Installing Sealights Playwright plugin...'
-                        cd integration-tests/playwright/e2e
+                        echo 'Navigating to Playwright directory...'
+                        cd integration-tests/playwright
                         pwd
-                        ls
+                        ls -la
+                        
+                        echo 'Installing dependencies and Sealights plugin...'
                         npm install
+                        npm install --save-dev sealights-playwright-plugin
+                        
+                        echo 'Installing Playwright browsers...'
                         npx playwright install chromium
                         npx playwright install-deps
-                        npm install --save-dev sealights-playwright-plugin
+                        
+                        echo 'Verifying installations...'
                         npm ls sealights-playwright-plugin
                         
-                        echo "Checking Node.js version..."
+                        echo "Checking versions..."
                         node -v
-                        echo "Checking npm version..."
                         npm -v
-                        echo "Checking Playwright version..."
                         npx playwright --version
 
                         echo 'Environment variables:'
@@ -99,26 +103,12 @@ pipeline {
                         echo "SL_TEST_STAGE: \$SL_TEST_STAGE" 
                         echo "NODE_DEBUG: \$NODE_DEBUG"
                         
-                        echo 'Debugging directory structure...'
-                        pwd
-                        ls -la
-                        cd ..
-                        pwd
-                        ls -la
+                        echo 'Verifying config file exists...'
+                        ls -la playwright.config.js
                         
-                        echo 'Looking for playwright.config.js...'
-                        find . -name "playwright.config.js" -type f
-                        
-                        echo 'Running Playwright tests with Sealights reporter...'
-                        if [ -f "playwright.config.js" ]; then
-                            npx playwright test
-                        elif [ -f "e2e/playwright.config.js" ]; then
-                            cd e2e
-                            npx playwright test
-                        else
-                            echo "ERROR: playwright.config.js not found!"
-                            exit 1
-                        fi
+                        echo 'Running Playwright tests with Sealights integration...'
+                        echo 'Note: Using Sealights as test wrapper instead of reporter due to compatibility'
+                        npx playwright test --reporter=list
                     """
                 }
             }
