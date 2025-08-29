@@ -78,6 +78,8 @@ pipeline {
                     sh """
                         echo 'Installing Sealights Playwright plugin...'
                         cd integration-tests/playwright/e2e
+                        pwd
+                        ls
                         npm install
                         npx playwright install chromium
                         npx playwright install-deps
