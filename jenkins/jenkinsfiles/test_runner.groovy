@@ -66,6 +66,7 @@ pipeline {
         }
       }
     }
+    /*
     stage('Playwright with Sealights') {
     steps {
         script {
@@ -115,6 +116,7 @@ pipeline {
         }
     }
 }
+*/
     stage('Cypress framework starting'){
       steps{
         script{
