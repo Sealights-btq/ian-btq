@@ -107,8 +107,8 @@ pipeline {
                         ls -la playwright.config.js
                         
                         echo 'Running Playwright tests with Sealights integration...'
-                        echo 'Note: Using Sealights as test wrapper instead of reporter due to compatibility'
-                        npx playwright test 
+                        echo 'Note: Using Sealights wrapper instead of reporter due to compatibility'
+                        npx sl-playwright run -- npx playwright test
                     """
                 }
             }
