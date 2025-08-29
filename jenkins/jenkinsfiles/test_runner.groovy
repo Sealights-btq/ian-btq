@@ -91,13 +91,8 @@ pipeline {
                         npx playwright --version
 
           					    echo 'Environment variables:'
-          					    echo "SL_TOKEN: ${process.env.SL_TOKEN ? 'SET' : 'NOT SET'}"
-          					    echo "SL_BUILD_SESSION_ID: $SL_BUILD_SESSION_ID"
-          					    echo "SL_TEST_STAGE: $SL_TEST_STAGE"
-          					    echo "NODE_DEBUG: $NODE_DEBUG"         
           					    echo 'Verifying Playwright config...'
-          					    cd integration-tests/playwright
-          					    node -e "console.log('Config loaded:', require('./playwright.config.js'))"       
+          					    cd integration-tests/playwright  
                         echo 'Running Playwright tests with Sealights reporter...'
                         npx playwright test --reporter=list
                         
