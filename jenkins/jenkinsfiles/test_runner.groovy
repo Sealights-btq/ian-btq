@@ -66,14 +66,14 @@ pipeline {
         }
       }
     }
-      stage('Playwright with Sealights') {
+    stage('Playwright with Sealights') {
     steps {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 withEnv([
                     "SL_BUILD_SESSION_ID=${params.SL_LABID ?: 'integ_main_Boutique'}",
                     "SL_TEST_STAGE=Playwright tests",
-                     "NODE_DEBUG=sl"
+                    "NODE_DEBUG=sl"
                 ]) {
                     sh """
                         echo 'Installing Sealights Playwright plugin...'
@@ -83,6 +83,7 @@ pipeline {
                         npx playwright install-deps
                         npm install --save-dev sealights-playwright-plugin
                         npm ls sealights-playwright-plugin
+                        
                         echo "Checking Node.js version..."
                         node -v
                         echo "Checking npm version..."
@@ -90,12 +91,32 @@ pipeline {
                         echo "Checking Playwright version..."
                         npx playwright --version
 
-          					    echo 'Environment variables:'
-          					    echo 'Verifying Playwright config...'
-          					    cd integration-tests/playwright  
-                        echo 'Running Playwright tests with Sealights reporter...'
-                        npx playwright test --reporter=list
+                        echo 'Environment variables:'
+                        echo "SL_TOKEN: \${SL_TOKEN:+SET}"
+                        echo "SL_BUILD_SESSION_ID: \$SL_BUILD_SESSION_ID"
+                        echo "SL_TEST_STAGE: \$SL_TEST_STAGE" 
+                        echo "NODE_DEBUG: \$NODE_DEBUG"
                         
+                        echo 'Debugging directory structure...'
+                        pwd
+                        ls -la
+                        cd ..
+                        pwd
+                        ls -la
+                        
+                        echo 'Looking for playwright.config.js...'
+                        find . -name "playwright.config.js" -type f
+                        
+                        echo 'Running Playwright tests with Sealights reporter...'
+                        if [ -f "playwright.config.js" ]; then
+                            npx playwright test
+                        elif [ -f "e2e/playwright.config.js" ]; then
+                            cd e2e
+                            npx playwright test
+                        else
+                            echo "ERROR: playwright.config.js not found!"
+                            exit 1
+                        fi
                     """
                 }
             }
