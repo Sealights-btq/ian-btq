@@ -85,7 +85,7 @@ func main() {
         
 	ctx := context.Background()
 	if os.Getenv("ENABLE_TRACING") == "1" {
-		log.Info("Tracing enabled")
+		log.Info("Tracing enabled.")
 		initTracing()
 
 	} else {
