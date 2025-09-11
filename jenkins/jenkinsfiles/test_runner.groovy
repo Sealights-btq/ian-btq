@@ -73,7 +73,8 @@ pipeline {
                 withEnv([
                     "SL_LAB_ID=integ_main_Boutique",
                     "SL_TEST_STAGE=Playwright tests",
-                    "NODE_DEBUG=sl"
+                    "NODE_DEBUG=sl",
+                    "SL_LOG_LEVEL=debug"
                 ]) {
                     sh """
                         echo 'Navigating to Playwright directory...'
