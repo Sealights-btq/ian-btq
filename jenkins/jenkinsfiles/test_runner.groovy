@@ -71,7 +71,7 @@ pipeline {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 withEnv([
-                    "SL_LAB_ID=integ_main_Boutique",
+                    "SL_BUILD_SESSION_ID=6d312eca-9f82-441b-befd-d2e4d8eb2216",
                     "SL_TEST_STAGE=Playwright tests",
                     "NODE_DEBUG=sl",
                     "SL_LOG_LEVEL=debug"
