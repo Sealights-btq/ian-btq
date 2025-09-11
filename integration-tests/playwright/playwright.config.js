@@ -2,9 +2,9 @@
 const { defineConfig, devices } = require('@playwright/test');
 
 /**
- * Log Sealights reporter config before Playwright runs
+ * Log environment variables for Sealights before Playwright runs
  */
-console.log('ℹ️ Initializing Sealights reporter with config:', {
+console.log('ℹ️ Sealights test config:', {
   token: process.env.SL_TOKEN ? '***' : 'MISSING',
   buildSessionId: process.env.SL_BUILD_SESSION_ID || 'MISSING',
   labId: process.env.SL_LABID || 'MISSING',
@@ -21,26 +21,16 @@ module.exports = defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
 
-  /* Reporters */
+  /* Reporters - only standard Playwright reporters */
   reporter: [
     ['list'], // prints results to console
-    ['html'], // keep HTML report
-    [
-      'sealights-playwright-plugin',
-      {
-        token: process.env.SL_TOKEN,
-        buildSessionId: process.env.SL_BUILD_SESSION_ID,
-        labId: process.env.SL_LABID,
-        testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
-        onReporterLoad: () => console.log('Sealights reporter loaded successfully'),
-      }
-    ]
+    ['html'], // generates HTML report
   ],
 
   use: {
     trace: 'on-first-retry',
     screenshot: 'on',
-    video: 'on'
+    video: 'on',
   },
 
   projects: [
@@ -55,6 +45,6 @@ module.exports = defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    }
-  ]
+    },
+  ],
 });
