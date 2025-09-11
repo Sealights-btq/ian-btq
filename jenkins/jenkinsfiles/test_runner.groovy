@@ -86,6 +86,7 @@ pipeline {
                         npm install --save-dev sealights-playwright-plugin
                         
                         echo 'Installing Playwright browsers...'
+                        npx playwright install --force
                         npx playwright install chromium
                         npx playwright install-deps
                         
