@@ -71,7 +71,7 @@ pipeline {
         script {
             withCredentials([string(credentialsId: 'sealights-token', variable: 'SL_TOKEN')]) {
                 withEnv([
-                    "SL_BUILD_SESSION_ID=${params.SL_LABID ?: 'integ_main_Boutique'}",
+                    "SL_BUILD_SESSION_ID=${{params.SL_LABID} ?: 'integ_main_Boutique'}",
                     "SL_TEST_STAGE=Playwright tests",
                     "NODE_DEBUG=sl"
                 ]) {
