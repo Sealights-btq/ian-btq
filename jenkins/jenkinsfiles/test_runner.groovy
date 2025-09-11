@@ -73,7 +73,6 @@ pipeline {
                 withEnv([
                     "SL_LAB_ID=integ_main_Boutique",
                     "SL_TEST_STAGE=Playwright tests",
-                    "SL_BUILD_SESSION_ID=integ_main_Boutique",
                     "NODE_DEBUG=sl"
                 ]) {
                     sh """
