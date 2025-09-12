@@ -4,12 +4,13 @@ const { defineConfig, devices } = require('@playwright/test');
 /**
  * Log environment variables for Sealights before Playwright runs
  */
-console.log('ℹ️ Sealights test config:', {
-  token: process.env.SL_TOKEN ? '***' : 'MISSING',
-  buildSessionId: process.env.SL_BUILD_SESSION_ID || 'MISSING',
-  labId: process.env.SL_LABID || 'MISSING',
-  testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
-});
+
+// console.log('ℹ️ Sealights test config:', {
+//   token: process.env.SL_TOKEN ? '***' : 'MISSING',
+//   buildSessionId: process.env.SL_BUILD_SESSION_ID || 'MISSING',
+//   labId: process.env.SL_LABID || 'MISSING',
+//   testStage: process.env.SL_TEST_STAGE || 'Playwright tests',
+// });
 
 /**
  * @see https://playwright.dev/docs/test-configuration
