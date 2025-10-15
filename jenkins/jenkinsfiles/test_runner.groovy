@@ -73,7 +73,8 @@ pipeline {
                 withEnv([
                     "SL_TEST_STAGE=Playwright tests",
                     "NODE_DEBUG=sl",
-                    "SL_LOG_LEVEL=debug"
+                    "SL_LOG_LEVEL=debug",
+                    "SL_LAB_ID=integ_main_Boutique"
                 ]) {
                     sh """
                         echo 'Navigating to Playwright directory...'
@@ -103,6 +104,7 @@ pipeline {
                         echo "SL_BUILD_SESSION_ID: \$SL_BUILD_SESSION_ID"
                         echo "SL_TEST_STAGE: \$SL_TEST_STAGE" 
                         echo "NODE_DEBUG: \$NODE_DEBUG"
+                        echo "SL_LAB_ID: \$SL_LAB_ID"
                         
                         echo 'Verifying config file exists...'
                         ls -la playwright.config.js
