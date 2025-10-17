@@ -13,8 +13,7 @@ const testData = {
   city: 'Austin',
   state: 'TX',
   zip: '78757',
-  cvv: '123',
-  baseURL: 'https://ian-btq.btq.sealights.co/'
+  cvv: '123'
 };
 
 async function fillCheckoutForm(page, data) {
@@ -27,7 +26,7 @@ async function fillCheckoutForm(page, data) {
 }
 
 test('Add single item to cart and complete checkout', async ({ page }) => {
-  await page.goto(testData.baseURL);
+  await page.goto('/');
   await page.locator('.col-md-4 > a').first().click();
   await page.getByRole('button', { name: 'Add To Cart' }).click();
   await fillCheckoutForm(page, testData);
@@ -37,7 +36,7 @@ test('Add single item to cart and complete checkout', async ({ page }) => {
 });
 
 test('Add Loafers to Cart and Validate', async ({ page }) => {
-  await page.goto(testData.baseURL);
+  await page.goto('/');
   await page.locator('div:nth-child(5) > a').click();
   await page.getByRole('button', { name: 'Add To Cart' }).click();
   await page.getByRole('heading', { name: 'Loafers' }).click();
@@ -48,7 +47,7 @@ test('Add Loafers to Cart and Validate', async ({ page }) => {
 });
 
 test('Add Mug to cart and validate', async ({ page }) => {
-  await page.goto(testData.baseURL);
+  await page.goto('/');
   await page.locator('div:nth-child(10) > a').click();
   await page.getByRole('button', { name: 'Add To Cart' }).click();
   await page.getByRole('heading', { name: 'Mug' }).click();
