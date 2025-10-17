@@ -32,6 +32,7 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     screenshot: 'on',
     video: 'on',
+    baseURL: 'https://10.2.10.163:8081'
   },
 
   projects: [
