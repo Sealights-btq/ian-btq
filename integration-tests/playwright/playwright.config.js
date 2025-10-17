@@ -29,10 +29,10 @@ module.exports = defineConfig({
   ],
 
   use: {
-    baseURL: process.env.MACHINE_DNS || 'http://localhost:8080',
+    baseURL: process.env.MACHINE_DNS || 'http://internal-ian.btq.sealights.co:8081',
     trace: 'on-first-retry',
     screenshot: 'on',
-    video: 'on'
+    video: 'on',
   },
 
   projects: [
