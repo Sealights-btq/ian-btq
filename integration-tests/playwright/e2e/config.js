@@ -1,6 +1,6 @@
 module.exports = {
-    baseUrl: 'https://demo.testim.io/prod/',
-    baseUrlNew: 'https://demo.testim.io/prod/?v=2',
+    baseUrl: 'https://10.2.10.163:8081',
+    baseUrlNew: 'https://10.2.10.163:8081',
     timeout: 1000,
     username: 'ian@testim.io',
     password: 'Testim123',
