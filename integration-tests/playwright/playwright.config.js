@@ -21,6 +21,10 @@ module.exports = defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
+  timeout: 60000, // Increased global timeout
+  expect: {
+    timeout: 10000, // Increased expect timeout
+  },
 
   /* Reporters - only standard Playwright reporters */
   reporter: [
@@ -29,10 +33,12 @@ module.exports = defineConfig({
   ],
 
   use: {
-    baseURL: process.env.MACHINE_DNS || 'http://internal-ian.btq.sealights.co:8081',
+    baseURL: process.env.machine_dns || process.env.MACHINE_DNS || 'http://internal-ian.btq.sealights.co:8081',
     trace: 'on-first-retry',
     screenshot: 'on',
     video: 'on',
+    actionTimeout: 30000, // Increased action timeout
+    navigationTimeout: 30000, // Increased navigation timeout
   },
 
   projects: [

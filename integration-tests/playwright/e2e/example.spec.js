@@ -7,6 +7,12 @@ const { test } = require('sealights-playwright-plugin');
 const config = require('./config');
 const PlaywrightHelper = require('./playwrightHelper');
 
+// Debug logging
+console.log('🔍 Playwright Test Configuration:');
+console.log('  - Base URL:', config.baseUrl);
+console.log('  - Machine DNS env:', process.env.machine_dns);
+console.log('  - MACHINE_DNS env:', process.env.MACHINE_DNS);
+
 const testData = {
   email: 'ian@sealights.com',
   address: '123 Main Street',
@@ -15,6 +21,32 @@ const testData = {
   zip: '78757',
   cvv: '123'
 };
+
+// Simple connectivity test
+test('Application connectivity test', async ({ page }) => {
+  console.log('🔍 Testing application connectivity...');
+  console.log('📍 Target URL:', config.baseUrl);
+  
+  try {
+    await page.goto('/', { waitUntil: 'networkidle', timeout: 30000 });
+    console.log('✅ Successfully connected to application');
+    console.log('📍 Final URL:', page.url());
+    console.log('📄 Page title:', await page.title());
+    
+    // Take a screenshot for debugging
+    await page.screenshot({ path: 'connectivity-test.png' });
+    
+    // Check if page loaded successfully
+    const title = await page.title();
+    expect(title).toBeTruthy();
+    console.log('✅ Page title is present:', title);
+    
+  } catch (error) {
+    console.log('❌ Failed to connect to application:', error.message);
+    await page.screenshot({ path: 'connectivity-failed.png' });
+    throw error;
+  }
+});
 
 async function fillCheckoutForm(page, data) {
   await page.getByLabel('E-mail Address').fill(data.email);
@@ -26,13 +58,45 @@ async function fillCheckoutForm(page, data) {
 }
 
 test('Add single item to cart and complete checkout', async ({ page }) => {
+  console.log('🚀 Starting test: Add single item to cart and complete checkout');
+  console.log('📍 Navigating to:', config.baseUrl);
+  
   await page.goto('/');
-  await page.locator('.col-md-4 > a').first().click();
-  await page.getByRole('button', { name: 'Add To Cart' }).click();
+  console.log('✅ Page loaded, current URL:', page.url());
+  
+  // Take screenshot for debugging
+  await page.screenshot({ path: 'debug-homepage.png' });
+  
+  // Wait for page to be fully loaded
+  await page.waitForLoadState('networkidle');
+  
+  // Try to find and click first product
+  try {
+    await page.locator('.col-md-4 > a').first().waitFor({ timeout: 10000 });
+    await page.locator('.col-md-4 > a').first().click();
+    console.log('✅ Clicked first product');
+  } catch (error) {
+    console.log('❌ Failed to find/click first product:', error.message);
+    await page.screenshot({ path: 'debug-no-products.png' });
+    throw error;
+  }
+  
+  // Try to add to cart
+  try {
+    await page.getByRole('button', { name: 'Add To Cart' }).waitFor({ timeout: 10000 });
+    await page.getByRole('button', { name: 'Add To Cart' }).click();
+    console.log('✅ Added item to cart');
+  } catch (error) {
+    console.log('❌ Failed to add to cart:', error.message);
+    await page.screenshot({ path: 'debug-no-add-to-cart.png' });
+    throw error;
+  }
+  
   await fillCheckoutForm(page, testData);
   await page.getByRole('button', { name: 'Place Order' }).click();
   await expect(page.getByText('Your order is complete!')).toBeVisible();
   await expect(page.getByText(/[\d]+\.\d{2}/)).toBeVisible();
+  console.log('✅ Test completed successfully');
 });
 
 test('Add Loafers to Cart and Validate', async ({ page }) => {

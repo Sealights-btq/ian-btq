@@ -32,15 +32,37 @@ class PlaywrightHelper {
   }
 
   async login(username, password, signedInUser) {
-
-  await page.getByRole('button', { name: 'Log in' }).click();
-  await page.locator('#login input[type="text"]').click();
-  await page.locator('#login input[type="text"]').fill(username);
-  await page.locator('input[type="password"]').click();
-  await page.locator('input[type="password"]').fill(password);
-  await page.getByRole('navigation').getByRole('button', { name: 'Log in' }).click();
-  await page.getByRole('button', { name: 'Hello, John' }).click();
-  await page.getByRole('link', { name: 'Log out' }).click();
+    console.log('🔐 Attempting login with username:', username);
+    
+    try {
+      await this.page.getByRole('button', { name: 'Log in' }).waitFor({ timeout: 10000 });
+      await this.page.getByRole('button', { name: 'Log in' }).click();
+      console.log('✅ Clicked login button');
+      
+      await this.page.locator('#login input[type="text"]').waitFor({ timeout: 10000 });
+      await this.page.locator('#login input[type="text"]').click();
+      await this.page.locator('#login input[type="text"]').fill(username);
+      console.log('✅ Filled username');
+      
+      await this.page.locator('input[type="password"]').waitFor({ timeout: 10000 });
+      await this.page.locator('input[type="password"]').click();
+      await this.page.locator('input[type="password"]').fill(password);
+      console.log('✅ Filled password');
+      
+      await this.page.getByRole('navigation').getByRole('button', { name: 'Log in' }).waitFor({ timeout: 10000 });
+      await this.page.getByRole('navigation').getByRole('button', { name: 'Log in' }).click();
+      console.log('✅ Submitted login form');
+      
+      await this.page.getByRole('button', { name: 'Hello, John' }).waitFor({ timeout: 10000 });
+      await this.page.getByRole('button', { name: 'Hello, John' }).click();
+      await this.page.getByRole('link', { name: 'Log out' }).click();
+      console.log('✅ Login/logout flow completed');
+      
+    } catch (error) {
+      console.log('❌ Login failed:', error.message);
+      await this.page.screenshot({ path: 'login-failed.png' });
+      throw error;
+    }
   }
 
   async screenshot(path) {
