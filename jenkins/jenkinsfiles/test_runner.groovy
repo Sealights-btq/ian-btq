@@ -84,9 +84,9 @@ pipeline {
                         npx playwright install chromium
                         npx playwright install-deps
                         echo 'Running Playwright tests with Sealights integration...'
-                        ./node_modules/.bin/slnodejs start --token ${env.SL_TOKEN} --labid ${params.SL_LABID} --teststage "Playwright tests"
+                        ./node_modules/.bin/slnodejs start --SL_TOKEN ${env.SL_TOKEN} --SL_LAB_ID ${params.SL_LABID} --SL_TEST_STAGE "Playwright tests"
                         npx playwright test
-                        ./node_modules/.bin/slnodejs end --token ${env.SL_TOKEN} --labid ${params.SL_LABID}
+                        ./node_modules/.bin/slnodejs end --SL_TOKEN ${env.SL_TOKEN} --SL_LAB_ID ${params.SL_LABID} --SL_TEST_STAGE "Playwright tests"
                         cd ../..
                         sleep ${env.wait_time}
                         """
