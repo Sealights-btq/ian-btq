@@ -1,7 +1,7 @@
 // @ts-check
-// Try using Sealights as test wrapper instead of reporter
+// Sealights Playwright Plugin Integration
+// This file uses the Sealights-enhanced test function for test intelligence and coverage tracking
 
-// const { test, expect } = require('@playwright/test');
 const { expect } = require('@playwright/test');
 const { test } = require('sealights-playwright-plugin');
 const config = require('./config');
@@ -22,16 +22,16 @@ const testData = {
   cvv: '123'
 };
 
-// Simple connectivity test
-test('Application connectivity test', async ({ page }) => {
-  console.log('🔍 Testing application connectivity...');
-  console.log('📍 Target URL:', config.baseUrl);
+// Simple connectivity test - validates basic application accessibility
+test('Application connectivity test - Homepage Access', async ({ page }) => {
+  console.log('Testing application connectivity...');
+  console.log('Target URL:', config.baseUrl);
   
   try {
     await page.goto('/', { waitUntil: 'networkidle', timeout: 30000 });
-    console.log('✅ Successfully connected to application');
-    console.log('📍 Final URL:', page.url());
-    console.log('📄 Page title:', await page.title());
+    console.log('Successfully connected to application');
+    console.log('Final URL:', page.url());
+    console.log('Page title:', await page.title());
     
     // Take a screenshot for debugging
     await page.screenshot({ path: 'connectivity-test.png' });
@@ -39,10 +39,10 @@ test('Application connectivity test', async ({ page }) => {
     // Check if page loaded successfully
     const title = await page.title();
     expect(title).toBeTruthy();
-    console.log('✅ Page title is present:', title);
+    console.log('Page title is present:', title);
     
   } catch (error) {
-    console.log('❌ Failed to connect to application:', error.message);
+    console.log('Failed to connect to application:', error.message);
     await page.screenshot({ path: 'connectivity-failed.png' });
     throw error;
   }
@@ -57,12 +57,12 @@ async function fillCheckoutForm(page, data) {
   await page.getByLabel('CVV').fill(data.cvv);
 }
 
-test('Add single item to cart and complete checkout', async ({ page }) => {
-  console.log('🚀 Starting test: Add single item to cart and complete checkout');
-  console.log('📍 Navigating to:', config.baseUrl);
+test('E2E Checkout Flow - Add Single Item and Complete Purchase', async ({ page }) => {
+  console.log('Starting test: Add single item to cart and complete checkout');
+  console.log('Navigating to:', config.baseUrl);
   
   await page.goto('/');
-  console.log('✅ Page loaded, current URL:', page.url());
+  console.log('Page loaded, current URL:', page.url());
   
   // Take screenshot for debugging
   await page.screenshot({ path: 'debug-homepage.png' });
@@ -74,9 +74,9 @@ test('Add single item to cart and complete checkout', async ({ page }) => {
   try {
     await page.locator('.col-md-4 > a').first().waitFor({ timeout: 10000 });
     await page.locator('.col-md-4 > a').first().click();
-    console.log('✅ Clicked first product');
+    console.log('Clicked first product');
   } catch (error) {
-    console.log('❌ Failed to find/click first product:', error.message);
+    console.log('Failed to find/click first product:', error.message);
     await page.screenshot({ path: 'debug-no-products.png' });
     throw error;
   }
@@ -85,9 +85,9 @@ test('Add single item to cart and complete checkout', async ({ page }) => {
   try {
     await page.getByRole('button', { name: 'Add To Cart' }).waitFor({ timeout: 10000 });
     await page.getByRole('button', { name: 'Add To Cart' }).click();
-    console.log('✅ Added item to cart');
+    console.log('Added item to cart');
   } catch (error) {
-    console.log('❌ Failed to add to cart:', error.message);
+    console.log('Failed to add to cart:', error.message);
     await page.screenshot({ path: 'debug-no-add-to-cart.png' });
     throw error;
   }
@@ -96,10 +96,10 @@ test('Add single item to cart and complete checkout', async ({ page }) => {
   await page.getByRole('button', { name: 'Place Order' }).click();
   await expect(page.getByText('Your order is complete!')).toBeVisible();
   await expect(page.getByText(/[\d]+\.\d{2}/)).toBeVisible();
-  console.log('✅ Test completed successfully');
+  console.log('Test completed successfully');
 });
 
-test('Add Loafers to Cart and Validate', async ({ page }) => {
+test('Product Management - Add Loafers to Cart and Validate Pricing', async ({ page }) => {
   await page.goto('/');
   await page.locator('div:nth-child(5) > a').click();
   await page.getByRole('button', { name: 'Add To Cart' }).click();
@@ -110,7 +110,7 @@ test('Add Loafers to Cart and Validate', async ({ page }) => {
   await page.getByRole('button', { name: 'Empty Cart' }).click();
 });
 
-test('Add Mug to cart and validate', async ({ page }) => {
+test('Product Management - Add Mug to Cart and Validate Details', async ({ page }) => {
   await page.goto('/');
   await page.locator('div:nth-child(10) > a').click();
   await page.getByRole('button', { name: 'Add To Cart' }).click();
