@@ -48,6 +48,7 @@ pipeline {
     booleanParam(name: 'Junit_with_testNG', defaultValue: false, description: 'Run tests using Junit testing framework with testNG (maven)')
     booleanParam(name: 'Junit_without_testNG', defaultValue: false, description: 'Run tests using Junit testing framework without testNG (maven)')
     booleanParam(name: 'Junit_with_testNG_gradle', defaultValue: false, description: 'Run tests using Junit testing framework with testNG (gradle)')
+    booleanParam(name: 'Playwright', defaultValue: false, description: 'Run tests using Playwright testing framework')
     booleanParam(name: 'Mocha', defaultValue: false, description: 'Run tests using Mocha testing framework')
     booleanParam(name: 'MS', defaultValue: false, description: 'Run tests using MS testing framework')
     booleanParam(name: 'NUnit', defaultValue: false, description: 'Run tests using NUnit testing framework')
@@ -124,6 +125,7 @@ pipeline {
               Junit_with_testNG: params.Junit_with_testNG,
               Junit_without_testNG: params.Junit_without_testNG,
               Junit_with_testNG_gradle: params.Junit_with_testNG_gradle,
+              Playwright: params.Playwright,
               Mocha: params.Mocha,
               MS: params.Mocha,
               NUnit: params.NUnit,
@@ -169,6 +171,7 @@ def run_tests(Map params){
         booleanParam(name: 'Junit_with_testNG', value: params.Junit_with_testNG),
         booleanParam(name: 'Junit_without_testNG', value: params.Junit_without_testNG),
         booleanParam(name: 'Junit_with_testNG_gradle', value: params.Junit_with_testNG_gradle),
+        booleanParam(name: 'Playwright', value: params.Playwright),
         booleanParam(name: 'Mocha', value: params.Mocha),
         booleanParam(name: 'MS', value: params.Mocha),
         booleanParam(name: 'NUnit', value: params.NUnit),
