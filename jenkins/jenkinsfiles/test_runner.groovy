@@ -84,8 +84,8 @@ pipeline {
                         npx playwright install chromium
                         npx playwright install-deps
                         echo 'Setting up Sealights environment variables for Playwright...'
-                        export SL_TOKEN="${env.SL_TOKEN}"
-                        export SL_LAB_ID="${params.SL_LABID}"
+                        export SL_TOKEN=${env.SL_TOKEN}
+                        export SL_LAB_ID=${params.SL_LABID}
                         export SL_TEST_STAGE="Playwright Tests"
                         export SL_TIA_DISABLED="false"
                         export SL_DISABLE="false"
