@@ -18,12 +18,14 @@ You must set these environment variables before running tests:
 # Your Sealights agent token (required)
 export SL_TOKEN="your_sealights_token_here"
 
-# Unique identifier for the build session (required)
-export SL_BUILD_SESSION_ID="your_build_session_id_here"
-
 # The current testing stage (required)
-export SL_TEST_STAGE="e2e"
+export SL_TEST_STAGE="Playwright Tests"
+
+# Lab ID for test environment (required)
+export SL_LAB_ID="integ_main_Boutique"
 ```
+
+**Note**: `SL_BUILD_SESSION_ID` is NOT required for the Playwright plugin - it's handled automatically by the plugin.
 
 ### Optional Variables
 

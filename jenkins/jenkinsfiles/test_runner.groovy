@@ -77,16 +77,20 @@ pipeline {
                         echo ${env.SL_TOKEN}>sltoken.txt
                         npm install
                         npm install --save-dev sealights-playwright-plugin
-                        npm install slnodejs
                         export machine_dns="${env.MACHINE_DNS}"
+                        export MACHINE_DNS="${env.MACHINE_DNS}"
                         echo 'Installing Playwright browsers...'
                         npx playwright install --force
                         npx playwright install chromium
                         npx playwright install-deps
+                        echo 'Setting up Sealights environment variables for Playwright...'
+                        export SL_TOKEN="${env.SL_TOKEN}"
+                        export SL_LAB_ID="${params.SL_LABID}"
+                        export SL_TEST_STAGE="Playwright Tests"
+                        export SL_TIA_DISABLED="false"
+                        export SL_DISABLE="false"
                         echo 'Running Playwright tests with Sealights integration...'
-                        ./node_modules/.bin/slnodejs start --token ${env.SL_TOKEN} --labid ${params.SL_LABID} --teststage "Playwright tests"
                         npx playwright test
-                        ./node_modules/.bin/slnodejs end --token ${env.SL_TOKEN} --labid ${params.SL_LABID}
                         cd ../..
                         sleep ${env.wait_time}
                         """
