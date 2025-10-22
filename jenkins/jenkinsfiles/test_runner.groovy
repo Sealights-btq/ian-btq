@@ -86,7 +86,7 @@ pipeline {
                         echo 'Running Playwright tests with Sealights integration...'
                         ./node_modules/.bin/slnodejs start --token ${env.SL_TOKEN} --labid ${params.SL_LABID} --teststage "Playwright tests"
                         npx playwright test
-                        ./node_modules/.bin/slnodejs end --token ${env.SL_TOKEN} --labid ${params.SL_LABID} --teststage "Playwright tests"
+                        ./node_modules/.bin/slnodejs end --token ${env.SL_TOKEN} --labid ${params.SL_LABID}
                         cd ../..
                         sleep ${env.wait_time}
                         """
