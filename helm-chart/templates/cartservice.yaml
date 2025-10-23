@@ -104,7 +104,7 @@ spec:
           - |
             /sealights/agent/SL.DotNet cdAgent --appName cartservice --branchName ${SL_BRANCH} --buildName ${BUILD_NAME} \
             --binDir /app  --includeNamespace 'cartservice*' --includedAssemblies 'cartservice*' --target /app/cartservice --token ${SL_TOKEN} --workingDir /app \
-            --identifyMethodsByFqn --labId ${SL_LAB_ID}
+            --identifyMethodsByFqn --labId ${SL_LAB_ID} --scm git --scmBaseUrl https://github.com/Sealights-btq/ian-btq
       volumes:
       - name: dotnet-cd-agent-file
         emptyDir: {}
