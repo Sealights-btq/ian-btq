@@ -32,8 +32,6 @@ WORKDIR /usr/src/app
 
 #COPY package*.json ./
 COPY . .
-# Copy .git metadata manually
-COPY .git .git
 
 RUN npm install --only=production
 #Install the agent (Not a url)
