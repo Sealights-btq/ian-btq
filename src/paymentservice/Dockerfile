@@ -28,6 +28,9 @@ RUN apk add --update --no-cache \
     g++ \
     git
 
+# Copy .git metadata manually
+COPY .git .git
+
 WORKDIR /usr/src/app
 
 #COPY package*.json ./
