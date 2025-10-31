@@ -41,7 +41,7 @@ RUN npm i ${SEALIGHTS_NODE_AGENT}
 #Run config to get build session id
 RUN  ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
 #Scan the code
-RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --scmBaseUrl https://github.com/Sealights-btq/ian-btq/edit/main/src/paymentservice/ --es6Modules
+RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --es6Modules
 
 FROM base
 
