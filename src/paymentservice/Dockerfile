@@ -40,6 +40,8 @@ RUN ./node_modules/.bin/slnodejs config \
     --branch ${BRANCH} \
     --build ${BUILD_NAME}
 
+RUN ls -l
+
 RUN ./node_modules/.bin/slnodejs scan \
     --token ${SEALIGHTS_TOKEN} \
     --buildsessionidfile buildSessionId \
