@@ -38,9 +38,6 @@ WORKDIR /usr/src/app
 #COPY package*.json ./
 COPY . .
 
-COPY --from=builder /usr/src/app/buildSessionId .
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-
 RUN npm install --only=production
 #Install the agent (Not a url)
 RUN npm i ${SEALIGHTS_NODE_AGENT}
@@ -53,11 +50,11 @@ FROM base
 
 WORKDIR /usr/src/app
 #Copy the build session id file
-# COPY --from=builder /usr/src/app/buildSessionId .
-# COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/buildSessionId .
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 
 COPY . .
-ENV NODE_DEBUG=sl
+#ENV NODE_DEBUG=sl
 EXPOSE 50051
 #Run code with sealights
 CMD  ./node_modules/.bin/slnodejs run --token "${SL_TOKEN}" --buildsessionidfile buildSessionId --labid "${SL_LAB_ID}" --workspacepath . index.js
