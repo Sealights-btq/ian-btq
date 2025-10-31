@@ -43,8 +43,6 @@ RUN npm install --only=production
 RUN npm i ${SEALIGHTS_NODE_AGENT}
 #Run config to get build session id
 RUN  ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
-#Copy new BSID
-COPY --from=builder /usr/src/app/buildSessionId .
 #Scan the code
 RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --es6Modules
 
@@ -52,6 +50,7 @@ FROM base
 
 WORKDIR /usr/src/app
 #Copy the build session id file
+COPY --from=builder /usr/src/app/buildSessionId .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
 COPY . .
