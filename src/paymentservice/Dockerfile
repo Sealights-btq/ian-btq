@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:20.5.0-alpine@sha256:11087abe911baf2fd7e34192f4598bf7e438239e9914f5b7ecda5fb5a7b1a2dd as base
+FROM node:20.5.0-alpine as base
 
 FROM base as builder
 
@@ -20,27 +20,32 @@ ARG SEALIGHTS_TOKEN
 ARG BRANCH
 ARG BUILD_NAME=0.4.3
 ENV SEALIGHTS_NODE_AGENT=slnodejs
-ENV NODE_DEBUG=sl
-ENV SL_LOG_LEVEL=debug
-# Some packages (e.g. @google-cloud/profiler) require additional
-# deps for post-install scripts
-RUN apk add --update --no-cache \
-    python3 \
-    make \
-    g++ \
-    git
 
+RUN apk add --update --no-cache python3 make g++ git
+
+# Create working directory for your app
 WORKDIR /usr/src/app
+COPY . .
 
-RUN git clone --depth=1 https://github.com/Sealights-btq/ian-btq.git /usr/src/app
+# Clone the Sealights repo somewhere else, if you need it for scanning
+RUN git clone --depth=1 https://github.com/Sealights-btq/ian-btq.git /sealights-src
 
 RUN npm install --only=production
-#Install the agent (Not a url)
 RUN npm i ${SEALIGHTS_NODE_AGENT}
-#Run config to get build session id
-RUN  ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
-#Scan the code
-RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --scmrepository "/usr/src/gitrepo" --es6Modules
+
+# Use /sealights-src as the source to scan
+RUN ./node_modules/.bin/slnodejs config \
+    --token ${SEALIGHTS_TOKEN} \
+    --appname "paymentservice" \
+    --branch ${BRANCH} \
+    --build ${BUILD_NAME}
+
+RUN ./node_modules/.bin/slnodejs scan \
+    --token ${SEALIGHTS_TOKEN} \
+    --buildsessionidfile buildSessionId \
+    --workspacepath "/sealights-src" \
+    --scm git \
+    --es6Modules
 
 FROM base
 
