@@ -33,8 +33,6 @@ WORKDIR /usr/src/app
 #COPY package*.json ./
 COPY . .
 
-COPY .git/ ./.git/
-
 RUN npm install --only=production
 #Install the agent (Not a url)
 RUN npm i ${SEALIGHTS_NODE_AGENT}
