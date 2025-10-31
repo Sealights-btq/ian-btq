@@ -30,7 +30,7 @@ RUN apk add --update --no-cache \
     g++ \
     git
 
-WORKDIR .
+WORKDIR /usr/src/app
 RUN git clone --bare https://github.com/Sealights-btq/ian-btq/
 
 WORKDIR /usr/src/app
