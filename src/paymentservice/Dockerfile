@@ -33,10 +33,10 @@ RUN git clone --depth=1 https://github.com/Sealights-btq/ian-btq.git /sealights-
 RUN npm install --only=production
 RUN npm i ${SEALIGHTS_NODE_AGENT}
 #Give permissions for BSID
-RUN chmod 777 buildSessionId
+# RUN chmod 777 buildSessionId
 # RUN rm -f buildSessionId
 #Print old BSID
-RUN cat buildSessionId
+# RUN cat buildSessionId
 # Use /sealights-src as the source to scan
 RUN ./node_modules/.bin/slnodejs config \
     --token ${SEALIGHTS_TOKEN} \
