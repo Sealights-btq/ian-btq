@@ -30,7 +30,7 @@ RUN apk add --update --no-cache \
 
 WORKDIR /usr/src/app
 
-git clone --bare https://github.com/Sealights-btq/ian-btq/
+RUN git clone --bare https://github.com/Sealights-btq/ian-btq/
 
 #COPY package*.json ./
 COPY . .
