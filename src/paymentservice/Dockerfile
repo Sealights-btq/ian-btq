@@ -35,9 +35,6 @@ RUN git clone --bare https://github.com/Sealights-btq/ian-btq/
 
 WORKDIR /usr/src/app
 
-#COPY package*.json ./
-COPY . .
-
 RUN npm install --only=production
 #Install the agent (Not a url)
 RUN npm i ${SEALIGHTS_NODE_AGENT}
@@ -50,10 +47,12 @@ FROM base
 
 WORKDIR /usr/src/app
 #Copy the build session id file
+#COPY package*.json ./
+COPY . .
 COPY --from=builder /usr/src/app/buildSessionId .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
-COPY . .
+#COPY . .
 #ENV NODE_DEBUG=sl
 EXPOSE 50051
 #Run code with sealights
