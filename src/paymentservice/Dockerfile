@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM node:20.5.0-alpine as base
+FROM node:20.5.0-alpine@sha256:11087abe911baf2fd7e34192f4598bf7e438239e9914f5b7ecda5fb5a7b1a2dd as base
 
 FROM base as builder
 
@@ -20,54 +20,34 @@ ARG SEALIGHTS_TOKEN
 ARG BRANCH
 ARG BUILD_NAME=0.4.3
 ENV SEALIGHTS_NODE_AGENT=slnodejs
+# Some packages (e.g. @google-cloud/profiler) require additional
+# deps for post-install scripts
+RUN apk add --update --no-cache \
+    python3 \
+    make \
+    g++
 
-RUN apk add --update --no-cache python3 make g++ git
-
-# Create working directory for your app
 WORKDIR /usr/src/app
+
+#COPY package*.json ./
 COPY . .
-
-# Clone the Sealights repo somewhere else, if you need it for scanning
-RUN git clone --depth=1 https://github.com/Sealights-btq/ian-btq.git /sealights-src
-
 RUN npm install --only=production
+#Install the agent (Not a url)
 RUN npm i ${SEALIGHTS_NODE_AGENT}
-#Give permissions for BSID
-# RUN chmod 777 buildSessionId
-# RUN rm -f buildSessionId
-#Print old BSID
-# RUN cat buildSessionId
-# Use /sealights-src as the source to scan
-RUN ./node_modules/.bin/slnodejs config \
-    --token ${SEALIGHTS_TOKEN} \
-    --appname "paymentservice" \
-    --branch ${BRANCH} \
-    --build ${BUILD_NAME}
-
-#Print files
-RUN ls -l
-
-#Print new BSID
-RUN cat buildSessionId
-
-RUN ./node_modules/.bin/slnodejs scan \
-    --token ${SEALIGHTS_TOKEN} \
-    --buildsessionidfile buildSessionId \
-    --workspacepath "/sealights-src" \
-    --scm git \
-    --es6Modules
+#Run config to get build session id
+RUN  ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
+#Scan the code
+RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm none --es6Modules
 
 FROM base
 
 WORKDIR /usr/src/app
 #Copy the build session id file
-#COPY package*.json ./
-#COPY . .
 COPY --from=builder /usr/src/app/buildSessionId .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
-#COPY . .
-#ENV NODE_DEBUG=sl
+COPY . .
+ENV NODE_DEBUG=sl
 EXPOSE 50051
 #Run code with sealights
 CMD  ./node_modules/.bin/slnodejs run --token "${SL_TOKEN}" --buildsessionidfile buildSessionId --labid "${SL_LAB_ID}" --workspacepath . index.js
