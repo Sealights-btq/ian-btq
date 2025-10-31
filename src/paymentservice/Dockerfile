@@ -31,9 +31,8 @@ RUN apk add --update --no-cache \
     git
 
 WORKDIR /usr/src/app
-RUN git clone --bare https://github.com/Sealights-btq/ian-btq/
 
-WORKDIR /usr/src/app
+RUN git clone --depth=1 https://github.com/Sealights-btq/ian-btq.git /usr/src/app
 
 RUN npm install --only=production
 #Install the agent (Not a url)
@@ -41,14 +40,14 @@ RUN npm i ${SEALIGHTS_NODE_AGENT}
 #Run config to get build session id
 RUN  ./node_modules/.bin/slnodejs config --token ${SEALIGHTS_TOKEN} --appname "paymentservice" --branch ${BRANCH} --build ${BUILD_NAME}
 #Scan the code
-RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --es6Modules
+RUN ./node_modules/.bin/slnodejs scan --token ${SEALIGHTS_TOKEN} --buildsessionidfile buildSessionId --workspacepath "." --scm git --scmrepository "/usr/src/gitrepo" --es6Modules
 
 FROM base
 
 WORKDIR /usr/src/app
 #Copy the build session id file
 #COPY package*.json ./
-COPY . .
+#COPY . .
 COPY --from=builder /usr/src/app/buildSessionId .
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 
