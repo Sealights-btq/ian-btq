@@ -46,7 +46,6 @@ pipeline{
 
                   sh """
                       /kaniko/executor \
-                      --no-cache \
                       --context ${CONTEXT} \
                       --dockerfile ${DP} \
                       --destination ${D} \
