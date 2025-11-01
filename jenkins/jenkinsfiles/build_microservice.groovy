@@ -45,6 +45,11 @@ pipeline{
                   def AGENT_URL_SLCI = params.AGENT_URL_SLCI
 
                   sh """
+                    echo "Copying .git metadata into ${CONTEXT}..."
+                    cp -r .git ${CONTEXT}/.git || echo ".git copy skipped"
+                  """
+
+                  sh """
                       /kaniko/executor \
                       --context ${CONTEXT} \
                       --dockerfile ${DP} \
