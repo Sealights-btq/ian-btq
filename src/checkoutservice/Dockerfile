@@ -36,7 +36,7 @@ RUN ./slcli config create-bsid --app ${SERVICE_NAME} --branch ${BRANCH} --build 
 #Scanning the code
 RUN ./slcli scan --bsid buildSessionId.txt --path-to-scanner ./slgoagent --workspacepath ./ --scm git --packages-excluded "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto"
 
-RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /checkoutservice .
+RUN go build -buildvcs=false -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /checkoutservice .
 RUN go mod download
 
 #RUN go build -o main .
