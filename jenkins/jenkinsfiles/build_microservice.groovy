@@ -44,11 +44,15 @@ pipeline{
                   def AGENT_URL = params.AGENT_URL
                   def AGENT_URL_SLCI = params.AGENT_URL_SLCI
 
-                  // Copy git files into context
-                  sh """
-                    echo "Copying .git metadata into ${CONTEXT}..."
-                    cp -r .git ${CONTEXT}/.git || echo ".git copy skipped"
-                  """
+                  // Copy git files into context for SCM integration (only for Node.js, Python, Go services)
+                  // Java and .NET services use CD agents and don't need build-time SCM integration
+                  def servicesNeedingScm = ["checkoutservice", "currencyservice", "emailservice", "frontend", "paymentservice", "productcatalogservice", "recommendationservice", "shippingservice"]
+                  if (servicesNeedingScm.contains(params.SERVICE)) {
+                    sh """
+                      echo "Copying .git metadata into ${CONTEXT} for SCM integration..."
+                      cp -r .git ${CONTEXT}/.git || echo ".git copy skipped"
+                    """
+                  }
 
                   sh """
                       /kaniko/executor \
