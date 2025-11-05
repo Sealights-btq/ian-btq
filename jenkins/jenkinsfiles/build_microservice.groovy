@@ -44,7 +44,7 @@ pipeline{
                   def AGENT_URL = params.AGENT_URL
                   def AGENT_URL_SLCI = params.AGENT_URL_SLCI
 
-                  Copy git files into context
+                  // Copy git files into context
                   sh """
                     echo "Copying .git metadata into ${CONTEXT}..."
                     cp -r .git ${CONTEXT}/.git || echo ".git copy skipped"
