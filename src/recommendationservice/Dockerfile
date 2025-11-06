@@ -7,6 +7,7 @@ ARG BUILD_NAME=0.4.3
 ENV SEALIGHTS_PYTHON=sealights-python-agent
 # Install Git in the base stage
 RUN apt-get -qq update && apt-get install -y --no-install-recommends wget g++ git && rm -rf /var/lib/apt/lists/*
+RUN git config --global --add safe.directory /recommendationservice
 
 # get packages
 COPY requirements.txt .
