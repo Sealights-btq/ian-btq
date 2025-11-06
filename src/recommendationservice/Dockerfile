@@ -25,11 +25,11 @@ ENV PYTHONUNBUFFERED=1
 COPY --from=builder /usr/local/lib/python3.10/ /usr/local/lib/python3.10/
 WORKDIR /recommendationservice
 COPY . .
-RUN git config --global --add safe.directory /recommendationservice
+#RUN git config --global --add safe.directory /recommendationservice
 #Get the build session id
 RUN sl-python config --appname recommendationservice --branchname ${BRANCH} --buildname ${BUILD_NAME} --workspacepath ./ --token ${SEALIGHTS_TOKEN} --exclude "*grpc*"
 #Scan the code
-RUN sl-python scan --scm git --scmbaseurl https://github.com/Sealights-btq/ian-btq/ --token ${SEALIGHTS_TOKEN}
+RUN sl-python scan --scm git --scmbaseurl https://github.com/Sealights-btq/ian-btq.git --token ${SEALIGHTS_TOKEN}
 #COPY --from=builder /recommendationservice/buildSessionId.txt .
 #RUN export SL_BUILD_SESSION_ID=`cat buildSessionId.txt`
 ENV SL_DEBUG=true
