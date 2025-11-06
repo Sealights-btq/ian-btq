@@ -26,7 +26,7 @@ COPY --from=builder /usr/local/lib/python3.10/ /usr/local/lib/python3.10/
 WORKDIR /recommendationservice
 COPY . .
 #Get the build session id
-RUN sl-python config --appname recommendationservice --branchname ${BRANCH} --buildname ${BUILD_NAME} --workspacepath ./ --token ${SEALIGHTS_TOKEN} --exclude "*grpc*"
+RUN sl-python config --appname recommendationservice --branchname ${BRANCH} --buildname ${BUILD_NAME} --workspacepath /src/recommendationservice --token ${SEALIGHTS_TOKEN} --exclude "*grpc*"
 #Scan the code
 RUN sl-python scan --scm git --scmbaseurl https://github.com/Sealights-btq/ian-btq --token ${SEALIGHTS_TOKEN}
 #COPY --from=builder /recommendationservice/buildSessionId.txt .
