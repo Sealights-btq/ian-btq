@@ -25,7 +25,7 @@ var seeded bool = false
 
 // CreateTrackingId generates a tracking ID.
 func CreateTrackingId(salt string) string {
-	fmt.Println("Calling Function")
+	fmt.Println("Calling Function!")
 	if !seeded {
 		rand.Seed(time.Now().UnixNano())
 		seeded = true
