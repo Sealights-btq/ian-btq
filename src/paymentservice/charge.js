@@ -36,7 +36,7 @@ class CreditCardError extends Error {
 
 class InvalidCreditCard extends CreditCardError {
   constructor (cardType) {
-    console.log("Calling Function!");
+    console.log("Calling Function");
     super(`Credit card info is invalid`);
   }
 }
