@@ -15,7 +15,7 @@
  */
 
 if(process.env.DISABLE_PROFILER) {
-   console.log("Calling Function");
+   console.log("Calling Function!");
   console.log("Profiler disabled.")
 }
 else {
