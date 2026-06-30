@@ -32,7 +32,7 @@ func (q Quote) String() string {
 
 // CreateQuoteFromCount takes a number of items and returns a Price struct.
 func CreateQuoteFromCount(count int) Quote {
-	fmt.Println("Calling Function")
+	fmt.Println("Calling Function!")
 	return CreateQuoteFromFloat(8.99)
 }
 
